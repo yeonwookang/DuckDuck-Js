@@ -27,7 +27,7 @@ whale.downloads.onCreated.addListener(evt => {
     url = evt.url;
     mime = evt.mime; //mime
 
-    // mime을 확장자로 변환
+    // 이미지 mime을 확장자로 변환
     switch(mime) {
     	case 'image/gif':
     		file_type = ".gif";
@@ -56,7 +56,8 @@ whale.downloads.onCreated.addListener(evt => {
 
 // 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
-   if(toggle) { // 켜져있을 때만
+  // 켜져있을 때만
+   if(toggle) {
 	   	//alert(mime);
 
 	    switch(mime) {
