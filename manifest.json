@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "어덕편덕",
-  "description": "툴바 버튼 예제",
+  "description": "인물 사진 자동 분류 확장앱",
   "version": "1.0",
   "browser_action": {
     "default_icon": "icon/duck-icon.png",
