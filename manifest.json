@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "어덕편덕",
+  "description": "툴바 버튼 예제",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon/duck-icon.png",
+    "default_popup": "popup/index.html",
+    "default_title": "어덕편덕"
+  },
+  "background": {
+  "scripts": ["background.js", "jquery-3.3.1.min.js"]
+  },
+  "permissions": ["downloads", "storage"]
+}
