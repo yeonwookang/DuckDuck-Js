@@ -11,5 +11,5 @@
   "background": {
   "scripts": ["background.js", "jquery-3.3.1.min.js"]
   },
-  "permissions": ["downloads", "storage"]
+  "permissions": ["downloads", "storage", "<all_urls>"]
 }

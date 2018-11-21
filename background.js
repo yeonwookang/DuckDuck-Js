@@ -73,17 +73,22 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
 	    	// person 변수에 인물값 저장, confidence에 정확도 저장
 	    	// CFR API 호출
-	    	confidence = 0.00; // 정확도
-	    	// 인물을 찾은 경우
-	    	if(confidence >= 80.0) {
 
-	    		// 파일이름을 인물로
+        $.post( "http://localhost/whale/python/test.py", {
+        		img_url : url,
+            file_type: file_type,
+            origin: item.filename},
+        		function(data, status){
 
-	    	} else { // 인물을 찾지 못한 경우
+      	    		// 파일이름을 인물로
+                filename = data;
+                filename = filename.replace(/\s+/, "");//왼쪽 공백제거
+                filename = filename.replace(/\s+$/g, "");//오른쪽 공백제거
+                filename = filename.replace(/\n/g, "");//행바꿈제거
+                filename = filename.replace(/\r/g, "");//엔터제거
 
-		    	// 'unknown' 폴더에 'unknown'이라는 이름으로 이미지 저장
-		    	filename = "unknown";
-	    	}
+        		}
+        	)
 
 	    	// alert('이미지 파일입니다.');
 	    	// 저장방식: downlonad/인물이름/인물이름.jpg
