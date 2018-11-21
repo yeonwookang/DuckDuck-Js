@@ -8,17 +8,22 @@ import urllib.request
 import json
 import cgi
 import time
+from threading import Thread
+
+def get_image(image_url, image_type) :
+    # 전달 받은 url로 임시 파일 다운로드
+    with urllib.request.urlopen(image_url) as url:
+        with open("temp" + image_type, 'wb') as f:
+            f.write(url.read())
 
 # 이미지 url과 확장자를 전달 받는다.
 param = cgi.FieldStorage()
 image_url = param['img_url'].value
 image_type = param['file_type'].value
-filename = param['origin'].value
 
-# 전달 받은 url로 임시 파일 다운로드
-with urllib.request.urlopen(image_url) as url:
-    with open(filename + image_type, 'wb') as f:
-        f.write(url.read())
+t1 = Thread(target = get_image, args=(image_url, image_type))
+t1.start()
+t1.join()
 
 # 페이지 인코딩
 print("content-type:text/html; charset=euc-kr\n\n")
@@ -29,7 +34,7 @@ client_secret = "t7s2UAUBOF"
 url = "https://openapi.naver.com/v1/vision/celebrity"  # 유명인 얼굴인식
 
 #임시 이미지 열기
-files = {'image': open(filename + image_type, 'rb')}
+files = {'image': open("temp" + image_type, 'rb')}
 
 # API를 호출해서 결과값 출력 json 형태
 headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
@@ -43,12 +48,12 @@ if (rescode == 200):
     j = json.loads(result)
 
     # 인식한 유명인의 숫자
-    count = len(j['faces'])
+    #count = len(j['faces'])
     name = j['faces'][0]['celebrity']['value']
     confidence = j['faces'][0]['celebrity']['confidence']
-    if(confidence >= 0.5) :
+    if(confidence >= 0.6) :
         print(name)
     else :
-        print("인식실패")
+        print("unknown")
 else:
     print("Error Code:" + rescode)
