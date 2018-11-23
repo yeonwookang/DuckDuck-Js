@@ -64,7 +64,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
             $.ajax({
               method: "POST",
               async: false, // 동기식으로 호출
-              url: "http://localhost/whale/python/test.py", // 서버에 디플로이하고 변경할 부분
+              url: "http://localhost/whale/python/test.py", // 서버에 디플로이하고 변경할 부분 (http://localhost/whale/python/test.py) (http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_api.py)
               data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
                 filename = data; // 인물이름 받기
