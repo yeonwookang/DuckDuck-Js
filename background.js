@@ -39,6 +39,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
          default: break;
      }
 
+      // 이미지인 경우만 CFR API 호출
 	    switch(mime) {
 	    	case 'image/gif':
 	    	case 'image/png':
@@ -48,39 +49,45 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 	    	case 'image/vnd.microsoft.icon':
 
         if(file_type) {
-          // CFR API 호출
+          // Ajax
             $.ajax({
               method: "POST",
-              async: false,
-              url: "http://localhost/whale/python/test.py",
+              async: false, // 동기식으로 호출
+              url: "http://localhost/whale/python/test.py", // 서버에 디플로이하고 변경할 부분
               data: {img_url : url, file_type: file_type }
             }).done(function( data ) {
-                filename = data;
+                filename = data; // 인물이름 받기
                 filename = filename.replace(/\s+/, "");//왼쪽 공백제거
                 filename = filename.replace(/\s+$/g, "");//오른쪽 공백제거
                 filename = filename.replace(/\n/g, "");//행바꿈제거
                 filename = filename.replace(/\r/g, "");//엔터제거
+
                 console.log("filename(background.js): " + filename);
               });
         }
 
+        // 에러나는 경우 결과값 없음
         if(filename == "") {
           var fail_confirm = confirm("인물 사진이 아닌 것 같아요. :(\n원본이름으로 저장할까요?");
+          // 원본 이름으로 저장
           if(fail_confirm) {
             suggest({filename: item.filename});
-          } else {
+          } else { // 파일 이름 수정
             filename = prompt("어떤 이름으로 저장할까요?", item.filename);
-            if(filename == null) {
+            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
               suggest({filename: item.filename});
             }
           }
+
+        // 인물이지만 이름을 찾지 못한 경우
         } else if(filename == "unknown") {
           filename = prompt("인물 인식에 실패했어요. :(\n어떤 이름으로 저장할까요?", filename);
-          if(filename == null) {
+          if(filename == null) { // 공백을 입력하면 원본이름으로 저장
             suggest({filename: item.filename});
           }
         }
 
+        // 최종 경로: .../download/인물이름/인물이름(n).xxx
         suggest({filename:  filename + "/" + filename + file_type});
 
 	    	break;
@@ -90,7 +97,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
    }
 });
 
-// 다운로드시에 true
+// 최초 다운로드시에 true
 whale.runtime.onInstalled.addListener(function (details) {
     whale.storage.sync.set({'toggle': true});
 });
