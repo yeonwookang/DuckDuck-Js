@@ -22,16 +22,13 @@ param = cgi.FieldStorage()
 image_url = param['img_url'].value
 image_type = param['file_type'].value
 
-#image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Suzy_at_a_fansigning_event%2C_31_January_2017_01.jpg/250px-Suzy_at_a_fansigning_event%2C_31_January_2017_01.jpg"
-#image_type = ".jpg"
-
 t1 = Thread(target = get_image, args=(image_url, image_type))
 t1.start()
 t1.join()
 
 # 페이지 인코딩
 print("content-type:text/html; charset=euc-kr\n\n")
-#print("image_url: " + image_url)
+
 # CFR API 호출 값
 client_id = "26DDSZNATQ1heWVfoHOS"
 client_secret = "t7s2UAUBOF"
@@ -45,16 +42,15 @@ headers = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secre
 response = requests.post(url, files=files, headers=headers)
 rescode = response.status_code
 if (rescode == 200):
-    result = response.text
-    #print(result)
 
+    result = response.text
     # 결과값을 json 객체로 변환
     j = json.loads(result)
 
-    # 인식한 유명인의 숫자
     #count = len(j['faces'])
     name = j['faces'][0]['celebrity']['value']
     confidence = j['faces'][0]['celebrity']['confidence']
+
     if(confidence >= 0.6) :
         print(name)
     else :

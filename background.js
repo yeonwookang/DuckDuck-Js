@@ -13,8 +13,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
        url = item.url;
        mime = item.mime; //mime
 
-       console.log("최초url: " + url);
-       console.log("최초확장자" + mime);
+       console.log("url(background.js): " + url +"\nmime(background.js): " + mime);
 
        // 이미지 mime을 확장자로 변환
        switch(mime) {
@@ -48,7 +47,6 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 	    	case 'image/webp':
 	    	case 'image/vnd.microsoft.icon':
 
-
         if(file_type) {
           // CFR API 호출
             $.ajax({
@@ -56,18 +54,35 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
               async: false,
               url: "http://localhost/whale/python/test.py",
               data: {img_url : url, file_type: file_type }
-            })
-              .done(function( data ) {
+            }).done(function( data ) {
                 filename = data;
                 filename = filename.replace(/\s+/, "");//왼쪽 공백제거
                 filename = filename.replace(/\s+$/g, "");//오른쪽 공백제거
                 filename = filename.replace(/\n/g, "");//행바꿈제거
                 filename = filename.replace(/\r/g, "");//엔터제거
-                console.log("test.py 결과: " + filename);
+                console.log("filename(background.js): " + filename);
               });
         }
 
+        if(filename == "") {
+          var fail_confirm = confirm("인물 사진이 아닌 것 같아요. :(\n원본이름으로 저장할까요?");
+          if(fail_confirm) {
+            suggest({filename: item.filename});
+          } else {
+            filename = prompt("어떤 이름으로 저장할까요?", item.filename);
+            if(filename == null) {
+              suggest({filename: item.filename});
+            }
+          }
+        } else if(filename == "unknown") {
+          filename = prompt("인물 인식에 실패했어요. :(\n어떤 이름으로 저장할까요?", filename);
+          if(filename == null) {
+            suggest({filename: item.filename});
+          }
+        }
+
         suggest({filename:  filename + "/" + filename + file_type});
+
 	    	break;
 
 	    	default:break;
