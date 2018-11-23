@@ -1,15 +1,19 @@
 {
-  "manifest_version": 2,
-  "name": "어덕편덕",
-  "description": "인물 사진 자동 분류 확장앱",
-  "version": "1.0",
-  "browser_action": {
-    "default_icon": "icon/duck-icon.png",
-    "default_popup": "popup/index.html",
-    "default_title": "어덕편덕"
-  },
-  "background": {
-  "scripts": ["background.js", "jquery-3.3.1.min.js"]
-  },
-  "permissions": ["downloads", "storage", "<all_urls>"]
-}
+    "manifest_version": 2,
+    "name": "어덕편덕",
+    "description": "인물 사진 자동 분류 확장앱",
+    "version": "1.0",
+
+    "sidebar_action": {
+      "default_page": "sidebar/sidebar.html",
+      "default_icon": "icon/duck-icon.png",
+
+      "default_title": "어덕편덕",
+      "use_navigation_bar": true,
+      "mobile_user_agent": true
+    },
+    "background": {
+    "scripts": ["background.js", "script.js", "jquery-3.3.1.min.js"]
+    },
+    "permissions": ["downloads", "storage", "<all_urls>"]
+  }
