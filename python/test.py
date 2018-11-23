@@ -11,6 +11,7 @@ import time
 from threading import Thread
 
 def get_image(image_url, image_type) :
+
     # 전달 받은 url로 임시 파일 다운로드
     with urllib.request.urlopen(image_url) as url:
         with open("temp" + image_type, 'wb') as f:
@@ -20,6 +21,9 @@ def get_image(image_url, image_type) :
 param = cgi.FieldStorage()
 image_url = param['img_url'].value
 image_type = param['file_type'].value
+
+#image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Suzy_at_a_fansigning_event%2C_31_January_2017_01.jpg/250px-Suzy_at_a_fansigning_event%2C_31_January_2017_01.jpg"
+#image_type = ".jpg"
 
 t1 = Thread(target = get_image, args=(image_url, image_type))
 t1.start()
