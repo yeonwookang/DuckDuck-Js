@@ -11,7 +11,6 @@ import time
 from threading import Thread
 
 def get_image(image_url, image_type) :
-
     # 전달 받은 url로 임시 파일 다운로드 (속도가 다소 느린 문제)
     with urllib.request.urlopen(image_url) as url:
         with open("temp" + image_type, 'wb') as f:

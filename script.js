@@ -1,3 +1,8 @@
+var fileUrl = '';
+var bytes = 0;
+var fileArray = new Array();
+var i =0;
+
 var url; // 다운로드 url
 var mime; // 파일 종류
 var file_type; // 파일 종류 => 파일 확장자
@@ -13,7 +18,13 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
        url = item.url;
        mime = item.mime; //mime
 
-       console.log("url(background.js): " + url +"\nmime(background.js): " + mime);
+       // 중복 체크
+       var isDuplicated = bytesCheck(url, item.totalBytes);
+       if(isDuplicated) {
+         confirm("중복된 이미지입니다.");
+       }
+
+       console.log("url(script.js): " + url +"\nmime(script.js): " + mime);
 
        // 이미지 mime을 확장자로 변환
        switch(mime) {
@@ -54,7 +65,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
               method: "POST",
               async: false, // 동기식으로 호출
               url: "http://localhost/whale/python/test.py", // 서버에 디플로이하고 변경할 부분
-              data: {img_url : url, file_type: file_type }
+              data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
                 filename = data; // 인물이름 받기
                 filename = filename.replace(/\s+/, "");//왼쪽 공백제거
@@ -62,7 +73,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                 filename = filename.replace(/\n/g, "");//행바꿈제거
                 filename = filename.replace(/\r/g, "");//엔터제거
 
-                console.log("filename(background.js): " + filename);
+                console.log("filename(script.js): " + filename);
               });
         }
 
@@ -96,6 +107,44 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 	    }
    }
 });
+
+//이미지의 url과 bytes를 인자로 넣어준다.
+function bytesCheck(fileUrl, bytes) {
+    /* 최근 순으로 bytes가 같고, 현재 존재하는 다운로드 아이템 5개를 가지고 온다.
+    다운로드된 파일의 경로를 fileArray 배열에 담는다. */
+    whale.downloads.search({
+        orderBy: ['-startTime'],
+        totalBytes: bytes,
+        exists: true,
+        limit: 5
+    }, downloadedItems => {
+        downloadedItems.forEach(item => {
+            fileArray[i++] = item.filename;
+
+            //다운로드 한 파일의 url과 기존 파일의 다운로드 url이 같다면 중복 가능성이 있으므로 treu값을 넘긴다.
+            if(fileUrl == item.url)
+                return true;
+        });
+    });
+
+    //같은 바이트인 파일은 중복 가능성이 있으므로 ture값 넘긴다.
+    if(fileArray.length!=0)
+
+        return true;
+    else
+        return false;
+}
+
+//이미지 좌표의 rgb값 비교 메소드
+
+
+
+
+
+
+
+
+
 
 // 최초 다운로드시에 true
 whale.runtime.onInstalled.addListener(function (details) {

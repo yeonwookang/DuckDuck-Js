@@ -5,7 +5,6 @@ $(function () {
         if(result.toggle) $('.checkbox[data-type=toggle]').click();
     });
 
-
     // toggle 버튼이 클릭 될 때
     $('.checkbox[data-type=toggle]').on('click', function () {
         var color = $('#lever').css('background-color'); // 레버의 색상으로 판별
