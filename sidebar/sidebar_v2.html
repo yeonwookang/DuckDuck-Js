@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="src/css/sidebar.css">
+</head>
+<body>
+  <div class="blind">
+    <a href="#container">본문 바로가기</a>
+  </div>
+  <!-- HEADER -->
+  <div class="header">
+    <h1 class="service_color">어덕편덕</h1>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+    <div class="nav">
+      <button type="button">HOME</button>
+      <button type="button">HISTORY</button>
+      <button type="button">FAQ</button>
+    </div>
+  </div>
+  <!-- //HEADER -->
+  <!-- CONTAINER -->
+  <div id="container">
+    <!-- case1: HOME-->
+    <div class="content">
+      <!-- case1-1. 기본 -->
+      <div class="inner">
+        <h2 class="text_left">다운로드 받은 이미지</h2>
+        <img src="../icon/duck.PNG" height=250 class="thumb" alt="다운받은이미지">
+        <div class="text_left img_info">
+          <p>다운로드 날짜 : 2018.11.23</p>
+          <p>파일명 : 이창섭</p>
+          <p>경로 : C:\Users\SAMSUNG\Downloads\이창섭</p>
+        </div>
+      </div>
+      <!-- case1-2. 중복확인 -->
+      <div class="inner">
+        <h2 class="text_left">중복확인</h2>
+        <ul>
+          <li><img src="../icon/duck.PNG" class="thumb" height=100 alt="중복 이미지"></li>
+          <li><img src="../icon/duck.PNG" class="thumb" height=100 alt="중복 이미지"></li>
+          <li><img src="../icon/duck.PNG" class="thumb" height=100 alt="중복 이미지"></li>
+        </ul>
+        <div class="user_answer">
+          <p>중복사진이 있습니다.<br> 그래도 다운로드를 진행하겠습니까?</p>
+          <button type="submit" class="btn_yes">확인</button>
+          <button type="button" class="btn_no">취소</button>
+        </div>
+      </div>
+    </div>
+    <!-- case2: HISTORY -->
+    <div class="content">
+      <div class="inner">
+        <h2 class="text_left">다운로드 히스토리</h2>
+        <table>
+          <caption class="blind">최신순으로 나열합니다</caption>
+          <col style="width:30%">
+          <col style="width:30%">
+          <col style="width:40%">
+          <tbody>
+            <tr>
+              <th scope="row">날짜</th>
+              <th scope="row">파일명</th>
+              <th scope="row">경로</th>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <td>2018.11.23</td>
+              <td>이창섭</td>
+              <td class="path">C:\Users\SAMSUNG\Downloads\이창섭</td>
+            </tr>
+            <tr>
+              <td>2018.11.23</td>
+              <td>이창섭</td>
+              <td class="path">C:\Users\SAMSUNG\Downloads\이창섭</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- case3: FAQ-->
+    <div class="content">
+      <div class="inner">
+        <h2 class="text_left">FAQ</h2>
+      </div>
+    </div>
+  </div>
+  <!-- //CONTAINER -->
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Copyright © 어덕행덕 Corp. All Rights Reserved.</p>
+  </div>
+  <!-- //FOOTER -->
+  <script src="../jquery-3.3.1.min.js"></script>
+  <script src="../popup/popup.js"></script>
+  <script src="script.js"></script>
+  <!--JavaScript at end of body for optimized loading-->
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
