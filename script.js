@@ -6,7 +6,7 @@ var i =0;
 var url; // 다운로드 url
 var mime; // 파일 종류
 var file_type; // 파일 종류 => 파일 확장자
-var filename; // 인물 이름
+var filename; // 파일 이름
 var toggle = true; // 토글 버튼 초기 상태
 
 // 다운로드 클릭시
@@ -121,8 +121,6 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       // 가장 높은 신뢰도가 60%이하인 경우 인식 실패 알림
                       if(confidences[max_index] <= 0.6) {
                         var fail_confirm = confirm("인식 신뢰도가 낮아요.\n결과: " + people[max_index] + "(" + confidences[max_index] + ")\n이대로 저장하시겠어요?");
-
-                        // 원본 이름으로 저장
                         if(!fail_confirm) { // 파일 이름 수정
                           filename = prompt("어떤 이름으로 저장할까요?", "");
                           if(filename == null) { // 공백을 입력하면 원본이름으로 저장
@@ -152,15 +150,11 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       suggest({filename: item.filename});
                     }
                   }
-
                 } finally {
                   console.log("filename(script.js): " + filename);
                 }
-
-
             });
         }
-
 	    	break;
 
 	    	default:break;
