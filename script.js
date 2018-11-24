@@ -125,10 +125,12 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
                       // '인물 여럿 인식시 알림' 체크되어있는 경우
                       if(many) {
-                        filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
-                        if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                          alert("유효하지 않은 파일 이름입니다.");
-                          suggest({filename: item.filename});
+                        if(count > 1) {
+                          filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
+                          if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                            alert("유효하지 않은 파일 이름입니다.");
+                            suggest({filename: item.filename});
+                          }
                         }
 
                       } else {
