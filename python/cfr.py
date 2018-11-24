@@ -1,8 +1,8 @@
-#!C:/Users/rk/Anaconda3/python.exe
-#-*- coding: utf-8 -*-
+#!/usr/bin/env python
+# coding: utf-8
+#-- coding: utf-8 --
 
-
-# 로컬호스트 테스트용 코드
+# AWS에 올라가있는 코드
 
 #import nltk # is not in Javascript
 import os
@@ -13,6 +13,11 @@ import json
 import cgi
 import time
 from threading import Thread
+import codecs
+import cgi
+import cgitb
+cgitb.enable()
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 def get_image(image_url, image_type) :
     # 전달 받은 url로 임시 파일 다운로드 (속도가 다소 느린 문제)
@@ -30,7 +35,7 @@ t1.start()
 t1.join()
 
 # 페이지 인코딩
-print("content-type:text/html; charset=euc-kr\n\n")
+print("content-type:text/html; charset=utf-8\r\n\n")
 
 # CFR API 호출 값
 client_id = "26DDSZNATQ1heWVfoHOS"
@@ -47,18 +52,8 @@ rescode = response.status_code
 if (rescode == 200):
 
     result = response.text
-    # 결과값을 json 객체로 변환
-    j = json.loads(result)
+    print(result)
 
-    #count = len(j['faces']) # 찾은 인물의 수
-    name = j['faces'][0]['celebrity']['value'] # 첫 번째 인물의 이름
-    confidence = j['faces'][0]['celebrity']['confidence'] # 첫 번째 인물의 신뢰도
-
-    # 신뢰도가 60%이상인 경우만 이름 반환 - 어떻게 신뢰도도 같이 반환할지?
-    if(confidence >= 0.6) :
-        print(name)
-    else :
-        print("unknown") # 인물 인식에 실패한 경우
 else:
     # 인물이 아니거나 호출이 제대로 되지 않은 경우에 에러코드
     print("Error Code:" + rescode)
