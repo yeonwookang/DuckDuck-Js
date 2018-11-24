@@ -3,15 +3,16 @@ var bytes = 0;
 var fileArray = new Array();
 var i =0;
 
-var url; // 다운로드 url
-var mime; // 파일 종류
-var file_type; // 파일 종류 => 파일 확장자
-var filename; // 파일 이름
 var toggle = true; // 토글 버튼 초기 상태
+var many = false; // 인물 여러명 감지시 알림 여부 상태
 
-// 다운로드 클릭시
-// 파일 경로 및 이름 지정
+// 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
+    var url; // 다운로드 url
+    var mime; // 파일 종류
+    var file_type; // 파일 종류 => 파일 확장자
+    var filename; // 파일 이름
+
     // 켜져있을 때만
      if(toggle) {
        // download url 가져오기
@@ -19,10 +20,10 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
        mime = item.mime; //mime
 
        // 중복 체크
-       var isDuplicated = bytesCheck(url, item.totalBytes);
+       /*var isDuplicated = bytesCheck(url, item.totalBytes);
        if(isDuplicated) {
          confirm("중복된 이미지입니다.");
-       }
+       }*/
 
        console.log("url(script.js): " + url +"\nmime(script.js): " + mime);
 
@@ -64,7 +65,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
           // Ajax
             $.ajax({
               method: "POST",
-              async: false, // 동기식으로 호출
+              async: false, // 동기식으로 통산
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
               data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
@@ -87,23 +88,27 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
                     // 인물을 찾지 못한 경우
                     if(count <= 0) {
-                      var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본이름으로 저장할까요?");
+                      var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
                       // 원본 이름으로 저장
                       if(fail_confirm) {
                         suggest({filename: item.filename});
                       } else { // 파일 이름 수정
                         filename = prompt("어떤 이름으로 저장할까요?", "");
                         if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                          alert("유효하지 않은 파일 이름입니다.");
                           suggest({filename: item.filename});
                         }
                       }
 
                     } else {
 
+                      var message = ""; // 인식된 인물 이름과 신뢰도 메시지
                       // 인물 정보 배열에 저장하기
                       for(var i = 0; i < faces.length; i++) {
                         people[i] = faces[i].celebrity.value;
                         confidences[i] = faces[i].celebrity.confidence;
+                        message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
+
                       }
 
                       // 기본 파일 이름은 가장 신뢰도가 높은 인물로
@@ -118,35 +123,46 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       // 신뢰도가 최고값인 인물의 이름
                       filename = people[max_index];
 
-                      // 가장 높은 신뢰도가 60%이하인 경우 인식 실패 알림
-                      if(confidences[max_index] <= 0.6) {
-                        var fail_confirm = confirm("인식 신뢰도가 낮아요.\n결과: " + people[max_index] + "(" + confidences[max_index] + ")\n이대로 저장하시겠어요?");
-                        if(!fail_confirm) { // 파일 이름 수정
-                          filename = prompt("어떤 이름으로 저장할까요?", "");
-                          if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                            suggest({filename: item.filename});
+                      // '인물 여럿 인식시 알림' 체크되어있는 경우
+                      if(many) {
+                        filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
+                        if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                          alert("유효하지 않은 파일 이름입니다.");
+                          suggest({filename: item.filename});
+                        }
+
+                      } else {
+                        // 신뢰도가 60%이하인 경우 인식 실패 알림
+                        if(confidences[max_index] <= 0.6) {
+                          var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + people[max_index] + "(" + (confidences[max_index]*100).toFixed(2) + "%)\n이대로 저장하시겠어요?");
+                          if(!fail_confirm) { // 파일 이름 수정
+                            filename = prompt("어떤 이름으로 저장할까요?", "");
+                            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                              alert("유효하지 않은 파일 이름입니다.");
+                              suggest({filename: item.filename});
+                            }
                           }
                         }
                       }
 
-                      // 사용자 설정
-                      // 가장 신뢰도가 높은 인물로 저장하기
-
-                      // 아닌 경우 선택할 수 있도록
-
                       // 최종 경로: .../download/인물이름/인물이름(n).xxx
-                      suggest({filename:  filename + "/" + filename + file_type});
+                      try {
+                        suggest({filename:  filename + "/" + filename + file_type});
+                      } catch(e) {
+                        suggest({filename:  item.filename});
+                      }
                     }
 
                 }
                 catch(exception){
-                  var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본이름으로 저장할까요?");
+                  var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
                   // 원본 이름으로 저장
                   if(fail_confirm) {
                     suggest({filename: item.filename});
                   } else { // 파일 이름 수정
                     filename = prompt("어떤 이름으로 저장할까요?", "");
                     if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                      alert("유효하지 않은 파일 이름입니다.");
                       suggest({filename: item.filename});
                     }
                   }
@@ -200,16 +216,22 @@ function bytesCheck(fileUrl, bytes) {
 
 
 
-// 최초 다운로드시에 true
+// toggle: 최초 다운로드시에 true /  many: 최초 다운로드시에 false
 whale.runtime.onInstalled.addListener(function (details) {
     whale.storage.sync.set({'toggle': true});
+    whale.storage.sync.set({'many': false});
 });
 
-// toggle 버튼 변화되면 스토리지에 상태 저장
+// toggle, many 변화되면 스토리지에 상태 저장
 whale.storage.onChanged.addListener(function (changes, namespace) {
     for (key in changes) {
         var storageChange = changes[key];
-        if (key == "toggle") toggle = storageChange.newValue;
-        console.log("toggle: " + toggle);
+        if (key == "toggle") {
+          toggle = storageChange.newValue;
+          console.log("toggle: " + toggle);
+      } else if (key == "many") {
+        many = storageChange.newValue;
+        console.log("many: " + many);
+      }
     }
 });
