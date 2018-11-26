@@ -5,6 +5,7 @@ var i =0;
 
 var toggle = true; // 토글 버튼 초기 상태
 var many = false; // 인물 여러명 감지시 알림 여부 상태
+
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var url; // 다운로드 url
@@ -66,8 +67,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
               method: "POST",
               async: false, // 동기식으로 통산
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
-              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });},
-              complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });},
+              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });}, // 로딩중 배지 색상 변경 (주황)
+              complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });}, // 완료후 배지 색상 (초록)
               data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
 
@@ -78,23 +79,56 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
               console.log("data(script.js): " + data); // 문자열
 
-                try {
-                    var celObj = JSON.parse(data); // json 객체 생성
+              try {
+                  var celObj = JSON.parse(data); // json 객체 생성
 
-                    // json 객체에서 정보 추출
-                    var count = celObj.info.faceCount; // 인물 수
-                    var faces = celObj.faces; // 인물 정보가 담긴 json Array
-                    var people = new Array(count); // 인물의 수만큼 배열 (인물이름)
-                    var confidences = new Array(count); // 신뢰도
+                  // json 객체에서 정보 추출
+                  var count = celObj.info.faceCount; // 인물 수
+                  var faces = celObj.faces; // 인물 정보가 담긴 json Array
+                  var people = new Array(count); // 인물의 수만큼 배열 (인물이름)
+                  var confidences = new Array(count); // 신뢰도
 
-                    // 인물을 찾지 못한 경우
-                    if(count <= 0) {
-                      var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
-                      // 원본 이름으로 저장
-                      if(fail_confirm) {
+                  // 인물을 찾지 못한 경우
+                  if(count <= 0) {
+                    var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
+                    // 원본 이름으로 저장
+                    if(fail_confirm) {
+                      suggest({filename: item.filename});
+                    } else { // 파일 이름 수정
+                      filename = prompt("어떤 이름으로 저장할까요?", "");
+                      if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                        alert("유효하지 않은 파일 이름입니다.");
                         suggest({filename: item.filename});
-                      } else { // 파일 이름 수정
-                        filename = prompt("어떤 이름으로 저장할까요?", "");
+                      }
+                    }
+
+                  } else {
+
+                    var message = ""; // 인식된 인물 이름과 신뢰도 메시지
+                    // 인물 정보 배열에 저장하기
+                    for(var i = 0; i < faces.length; i++) {
+                      people[i] = faces[i].celebrity.value;
+                      confidences[i] = faces[i].celebrity.confidence;
+                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
+
+                    }
+
+                    // 기본 파일 이름은 가장 신뢰도가 높은 인물로
+                    var max_confidences = confidences[0];
+                    var max_index = 0;
+                    for(var i = 0; i < count; i++) {
+                      if(max_confidences < confidences[i]) {
+                        max_confidences = confidences[i];
+                        max_index = i;
+                      }
+                    }
+                    // 신뢰도가 최고값인 인물의 이름
+                    filename = people[max_index];
+
+                    // '인물 여럿 인식시 알림' 체크되어있는 경우
+                    if(many) {
+                      if(count > 1) {
+                        filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
                         if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                           alert("유효하지 않은 파일 이름입니다.");
                           suggest({filename: item.filename});
@@ -102,77 +136,44 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       }
 
                     } else {
-
-                      var message = ""; // 인식된 인물 이름과 신뢰도 메시지
-                      // 인물 정보 배열에 저장하기
-                      for(var i = 0; i < faces.length; i++) {
-                        people[i] = faces[i].celebrity.value;
-                        confidences[i] = faces[i].celebrity.confidence;
-                        message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
-
-                      }
-
-                      // 기본 파일 이름은 가장 신뢰도가 높은 인물로
-                      var max_confidences = confidences[0];
-                      var max_index = 0;
-                      for(var i = 0; i < count; i++) {
-                        if(max_confidences < confidences[i]) {
-                          max_confidences = confidences[i];
-                          max_index = i;
-                        }
-                      }
-                      // 신뢰도가 최고값인 인물의 이름
-                      filename = people[max_index];
-
-                      // '인물 여럿 인식시 알림' 체크되어있는 경우
-                      if(many) {
-                        if(count > 1) {
-                          filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
+                      // 신뢰도가 60%이하인 경우 인식 실패 알림
+                      if(confidences[max_index] <= 0.6) {
+                        var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + people[max_index] + "(" + (confidences[max_index]*100).toFixed(2) + "%)\n이대로 저장하시겠어요?");
+                        if(!fail_confirm) { // 파일 이름 수정
+                          filename = prompt("어떤 이름으로 저장할까요?", "");
                           if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                             alert("유효하지 않은 파일 이름입니다.");
                             suggest({filename: item.filename});
                           }
                         }
-
-                      } else {
-                        // 신뢰도가 60%이하인 경우 인식 실패 알림
-                        if(confidences[max_index] <= 0.6) {
-                          var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + people[max_index] + "(" + (confidences[max_index]*100).toFixed(2) + "%)\n이대로 저장하시겠어요?");
-                          if(!fail_confirm) { // 파일 이름 수정
-                            filename = prompt("어떤 이름으로 저장할까요?", "");
-                            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                              alert("유효하지 않은 파일 이름입니다.");
-                              suggest({filename: item.filename});
-                            }
-                          }
-                        }
-                      }
-
-                      // 최종 경로: .../download/인물이름/인물이름(n).xxx
-                      try {
-                        suggest({filename:  filename + "/" + filename + file_type});
-                      } catch(e) {
-                        suggest({filename:  item.filename});
                       }
                     }
 
-                }
-                catch(exception){
-                  var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
-                  // 원본 이름으로 저장
-                  if(fail_confirm) {
-                    suggest({filename: item.filename});
-                  } else { // 파일 이름 수정
-                    filename = prompt("어떤 이름으로 저장할까요?", "");
-                    if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                      alert("유효하지 않은 파일 이름입니다.");
-                      suggest({filename: item.filename});
+                    // 최종 경로: .../download/인물이름/인물이름(n).xxx
+                    try {
+                      suggest({filename:  filename + "/" + filename + file_type});
+                    } catch(e) {
+                      suggest({filename:  item.filename});
                     }
                   }
-                } finally {
-                  console.log("filename(script.js): " + filename);
+
+              }
+              catch(exception){
+                var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
+                // 원본 이름으로 저장
+                if(fail_confirm) {
+                  suggest({filename: item.filename});
+                } else { // 파일 이름 수정
+                  filename = prompt("어떤 이름으로 저장할까요?", "");
+                  if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                    alert("유효하지 않은 파일 이름입니다.");
+                    suggest({filename: item.filename});
+                  }
                 }
-            });
+              } finally {
+                console.log("filename(script.js): " + filename);
+              }
+          });
         }
 	    	break;
 
@@ -243,6 +244,40 @@ whale.storage.onChanged.addListener(function (changes, namespace) {
       } else if (key == "many") {
         many = storageChange.newValue;
         console.log("many: " + many);
+      }
+    }
+});
+
+// 사이드바 열려있는지 체크
+var is_open = false;
+whale.sidebarAction.onClicked.addListener(function() {
+  if(result.opened) {
+    is_open = true;
+  } else {
+    is_open = false;
+  }
+});
+
+
+// 단축키
+whale.commands.onCommand.addListener(function (command) {
+    // 서비스 on/off 단축키
+    if (command === "toggle") {
+        if(toggle) {
+          whale.storage.sync.set({'toggle': false}); // 서비스 끄기
+        } else {
+          whale.storage.sync.set({'toggle': true}); // 서비스 켜기
+        }
+    }
+
+    // 사이드바 on/off 단축키
+    if(command === "side-page") {
+      if(is_open) {
+        whale.sidebarAction.hide();
+        is_open = false;
+      } else {
+        whale.sidebarAction.show();
+        is_open = true;
       }
     }
 });

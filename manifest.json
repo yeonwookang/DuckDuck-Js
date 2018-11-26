@@ -13,7 +13,21 @@
       "mobile_user_agent": true
     },
     "background": {
-    "scripts": ["script.js", "jquery-3.3.1.min.js"]
+      "scripts": ["script.js", "jquery-3.3.1.min.js"]
+    },
+    "commands": {
+        "toggle": {
+            "suggested_key": {
+                "default": "Alt+S"
+            },
+            "description": "서비스 On/Off 단축키"
+        },
+        "side-page": {
+            "suggested_key": {
+                "default": "Alt+A"
+            },
+            "description": "사이드바 On/Off 단축키"
+        }
     },
     "permissions": ["downloads", "storage", "<all_urls>"]
   }
