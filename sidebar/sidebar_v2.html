@@ -34,11 +34,11 @@
       <!-- case1-1. 기본 -->
       <div class="inner">
         <h2 class="text_left">다운로드 받은 이미지</h2>
-        <img src="../icon/duck.PNG" height=250 class="thumb" alt="다운받은이미지">
+        <img id = "test" src="../icon/duck.PNG" height=250 class="thumb" alt="다운받은이미지">
         <div class="text_left img_info">
-          <p><strong>다운로드 날짜 :</strong> 2018.11.23</p>
-          <p><strong>파일명 :</strong> 이창섭</p>
-          <p><strong>경로 :</strong> C:\Users\SAMSUNG\Downloads\이창섭</p>
+          <p><strong>다운로드 날짜 :</strong><span id="date"></span></p>
+          <p><strong>파일명 :</strong><span id="filename"></span></p>
+          <p><strong>경로 :</strong><span id="path"></span></p>
         </div>
       </div>
       <!-- case1-2. 중복확인 -->
@@ -57,10 +57,10 @@
       </div>
     </div>
     <!-- case2: HISTORY -->
-    <div class="content" style="display:none">
+    <div class="content" >
       <div class="inner">
         <h2 class="text_left">다운로드 히스토리</h2>
-        <table>
+        <table id = "historyTable"> 
           <caption class="blind">최신순으로 나열합니다</caption>
           <col style="width:30%">
           <col style="width:30%">
@@ -73,17 +73,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2018.11.23</td>
-              <td>이창섭</td>
-              <td class="path">C:\Users\SAMSUNG\Downloads\이창섭</td>
-            </tr>
-            <tr>
-              <td>2018.11.23</td>
-              <td>이창섭</td>
-              <td class="path">C:\Users\SAMSUNG\Downloads\이창섭</td>
-            </tr>
-
+            
           </tbody>
         </table>
       </div>
@@ -113,6 +103,7 @@
   <!-- //FOOTER -->
   <script src="../jquery-3.3.1.min.js"></script>
   <script src="../materialize.min.js"></script>
+  <script src="sidebar.js"></script>
   <script src="toggle.js"></script>
   <script src="many.js"></script>
 </body>
