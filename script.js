@@ -158,7 +158,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
                     } else {
                       // 신뢰도가 60%이하인 경우 인식 실패 알림
-                      if(confidences[max_index] <= 0.6) {
+                      if(conf <= 60.0) {
                         var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + people[max_index] + "(" + (confidences[max_index]*100).toFixed(2) + "%)\n이대로 저장하시겠어요?");
                         if(!fail_confirm) { // 파일 이름 수정
                           filename = prompt("어떤 이름으로 저장할까요?", "");
