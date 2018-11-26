@@ -6,6 +6,7 @@ var i =0;
 var toggle = true; // 토글 버튼 초기 상태
 var many = false; // 인물 여러명 감지시 알림 여부 상태
 
+
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var url; // 다운로드 url
@@ -19,11 +20,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
        url = item.url;
        mime = item.mime; //mime
 
-       // 중복 체크
-       /*var isDuplicated = bytesCheck(url, item.totalBytes);
-       if(isDuplicated) {
-         confirm("중복된 이미지입니다.");
-       }*/
+  
 
        console.log("url(script.js): " + url +"\nmime(script.js): " + mime);
 
@@ -108,22 +105,31 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     for(var i = 0; i < faces.length; i++) {
                       people[i] = faces[i].celebrity.value;
                       confidences[i] = faces[i].celebrity.confidence;
-                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
-
                     }
 
-                    // 기본 파일 이름은 가장 신뢰도가 높은 인물로
-                    var max_confidences = confidences[0];
-                    var max_index = 0;
-                    for(var i = 0; i < count; i++) {
-                      if(max_confidences < confidences[i]) {
-                        max_confidences = confidences[i];
-                        max_index = i;
+                    // 신뢰도 높은 순으로 정렬
+                    var temp;
+                    for(var i=confidences.length; i>0; i--) {
+                      for (var j=0; j<i-1; j++) {
+                        if(confidences[j] < confidences[j+1]) {
+                          temp = confidences[j]; 
+                          confidences[j] = confidences[j+1];
+                          confidences[j+1] = temp;
+	                    
+                          temp = people[j]; 
+                          people[j] = people[j+1];
+                          people[j+1] = temp;
+                        }
                       }
                     }
+
+                    for(var i = 0; i < people.length; i++) {
+                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
+                    }
+
                     // 신뢰도가 최고값인 인물의 이름
-                    filename = people[max_index];
-                    var conf = (confidences[max_index]*100).toFixed(2);
+                    filename = people[0];
+                    var conf = (confidences[0]*100).toFixed(2);
 
                     // 분석 결과 알림창
                     var mess = "분석결과\n" + filename + " (" + conf + "%)";
@@ -136,6 +142,9 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     };
 
                     whale.notifications.create(opt);
+
+
+                    
 
                     // '인물 여럿 인식시 알림' 체크되어있는 경우
                     if(many) {
@@ -194,6 +203,32 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
    }
 });
 
+
+function confidenceSort() {
+
+  var data = [4, 54, 2, 8, 63, 7, 55, 56 ];
+  var data2 = [ "4", "54", "2", "8", "63", "7", "55", "56" ];
+
+  var temp;
+	var cnt = 0;
+  var temp2 ="";
+  
+  for(var i=data.length; i>0; i--) {
+    for (var j=0; j<i-1; j++) {
+      if(data[j] < data[j+1]) {
+        temp = data[j]; 
+        data[j] = data[j+1];
+        data[j+1] = temp;
+	                    
+        temp2 = data2[j]; 
+        data2[j] = data2[j+1];
+        data2[j+1] = temp2;
+      }
+    }
+  }
+  alert(data  );
+  alert(data2  );
+}
 //이미지의 url과 bytes를 인자로 넣어준다.
 function bytesCheck(fileUrl, bytes) {
     /* 최근 순으로 bytes가 같고, 현재 존재하는 다운로드 아이템 5개를 가지고 온다.
@@ -220,9 +255,6 @@ function bytesCheck(fileUrl, bytes) {
     else
         return false;
 }
-
-//이미지 좌표의 rgb값 비교 메소드
-
 
 
 

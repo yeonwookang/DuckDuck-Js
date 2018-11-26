@@ -30,7 +30,7 @@ function downloadHistory () {
                 }
             }
         });
-        $('#test').attr('src',fileHistory[0][3]);
+        $('#thumb_img').attr('src',fileHistory[0][3]);
         $('#date').html(fileHistory[0][0]);
         $('#filename').html(fileHistory[0][1]);
         $('#path').html(fileHistory[0][2]);
