@@ -5,7 +5,6 @@ var i =0;
 
 var toggle = true; // 토글 버튼 초기 상태
 var many = false; // 인물 여러명 감지시 알림 여부 상태
-
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var url; // 다운로드 url
@@ -67,6 +66,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
               method: "POST",
               async: false, // 동기식으로 통산
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
+              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });},
+              complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });},
               data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
 
@@ -221,6 +222,8 @@ function bytesCheck(fileUrl, bytes) {
 // toggle: 최초 다운로드시에 true /  many: 최초 다운로드시에 false
 whale.runtime.onInstalled.addListener(function (details) {
     whale.storage.sync.set({'toggle': true});
+    whale.sidebarAction.setBadgeText({text: "O"});
+    whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });
     whale.storage.sync.set({'many': false});
 });
 
@@ -231,6 +234,12 @@ whale.storage.onChanged.addListener(function (changes, namespace) {
         if (key == "toggle") {
           toggle = storageChange.newValue;
           console.log("toggle: " + toggle);
+          if(toggle) {
+            whale.sidebarAction.setBadgeText({text: "O"});
+          } else {
+            whale.sidebarAction.setBadgeText({text: ""});
+          }
+
       } else if (key == "many") {
         many = storageChange.newValue;
         console.log("many: " + many);

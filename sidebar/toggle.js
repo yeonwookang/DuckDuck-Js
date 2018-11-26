@@ -11,7 +11,7 @@ $(function () {
         if(color==='rgb(69, 58, 99)') { //눌러지는 타이밍 기준 배경색이 회색이 아니면
             whale.storage.sync.set({'toggle': false}); // 서비스 끄기
         }else if(color==='rgb(204, 204, 204)'){
-            whale.storage.sync.set({'toggle': true}); // 서비스 켜기
+            whale.storage.sync.set({'toggle': true}); // 서비스 켜기=
         }
     });
 
