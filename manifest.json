@@ -29,5 +29,5 @@
             "description": "사이드바 On/Off 단축키"
         }
     },
-    "permissions": ["downloads", "storage", "<all_urls>"]
+    "permissions": ["downloads", "storage", "notifications", "<all_urls>"]
   }

@@ -61,13 +61,12 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 	    	case 'image/vnd.microsoft.icon':
 
         if(file_type) {
-
           // Ajax
             $.ajax({
               method: "POST",
               async: false, // 동기식으로 통산
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
-              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });}, // 로딩중 배지 색상 변경 (주황)
+              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });}, // 로딩중 배지 색상 변경 (주황), 알림창
               complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });}, // 완료후 배지 색상 (초록)
               data: {img_url : url, file_type: file_type } // 원본 url, 확장자
             }).done(function( data ) {
@@ -124,6 +123,19 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     }
                     // 신뢰도가 최고값인 인물의 이름
                     filename = people[max_index];
+                    var conf = (confidences[max_index]*100).toFixed(2);
+
+                    // 분석 결과 알림창
+                    var mess = "분석결과\n" + filename + " (" + conf + "%)";
+                    //var result_text = "분석 결과: " + filename + " ( " + (confidence[max_index]*100).toFixed(2) + "%)";
+                    var opt = {
+                      type: "basic",
+                      title: "어덕편덕",
+                      message: mess,
+                      iconUrl: "icon/duck.PNG"
+                    };
+
+                    whale.notifications.create(opt);
 
                     // '인물 여럿 인식시 알림' 체크되어있는 경우
                     if(many) {
