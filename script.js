@@ -4,7 +4,7 @@ var fileArray = new Array();
 var i =0;
 
 var toggle = true; // 토글 버튼 초기 상태
-var many = false; // 인물 여러명 감지시 알림 여부 상태
+var many = true; // 인물 여러명 감지시 알림 여부 상태
 
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
@@ -109,11 +109,11 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     for(var i=confidences.length; i>0; i--) {
                       for (var j=0; j<i-1; j++) {
                         if(confidences[j] < confidences[j+1]) {
-                          temp = confidences[j]; 
+                          temp = confidences[j];
                           confidences[j] = confidences[j+1];
                           confidences[j+1] = temp;
-	                    
-                          temp = people[j]; 
+
+                          temp = people[j];
                           people[j] = people[j+1];
                           people[j+1] = temp;
                         }
@@ -130,7 +130,6 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
                     // 분석 결과 알림창
                     var mess = "분석결과\n" + filename + " (" + conf + "%)";
-                    //var result_text = "분석 결과: " + filename + " ( " + (confidence[max_index]*100).toFixed(2) + "%)";
                     var opt = {
                       type: "basic",
                       title: "어덕편덕",
@@ -138,7 +137,9 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       iconUrl: "icon/duck.PNG"
                     };
 
-                    whale.notifications.create(opt);
+                    if(count == 1) {
+                      whale.notifications.create(opt);
+                    }
 
                     // '인물 여럿 인식시 알림' 체크되어있는 경우
                     if(many) {
@@ -148,12 +149,23 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                           alert("유효하지 않은 파일 이름입니다.");
                           suggest({filename: item.filename});
                         }
+                      } else if(count == 1) {
+                        if(conf <= 60.0) {
+                          var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
+                          if(!fail_confirm) { // 파일 이름 수정
+                            filename = prompt("어떤 이름으로 저장할까요?", "");
+                            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
+                              alert("유효하지 않은 파일 이름입니다.");
+                              suggest({filename: item.filename});
+                            }
+                          }
+                        }
                       }
 
                     } else {
                       // 신뢰도가 60%이하인 경우 인식 실패 알림
                       if(conf <= 60.0) {
-                        var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + people[max_index] + "(" + (confidences[max_index]*100).toFixed(2) + "%)\n이대로 저장하시겠어요?");
+                        var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
                         if(!fail_confirm) { // 파일 이름 수정
                           filename = prompt("어떤 이름으로 저장할까요?", "");
                           if(filename == null) { // 공백을 입력하면 원본이름으로 저장
@@ -235,12 +247,13 @@ function bytesCheck(fileUrl, bytes) {
 
 
 
-// toggle: 최초 다운로드시에 true /  many: 최초 다운로드시에 false
+// toggle: 최초 다운로드시에 true /  many: 최초 다운로드시에 true
 whale.runtime.onInstalled.addListener(function (details) {
     whale.storage.sync.set({'toggle': true});
+    whale.storage.sync.set({'many': true});
     whale.sidebarAction.setBadgeText({text: "O"});
     whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });
-    whale.storage.sync.set({'many': false});
+
 });
 
 // toggle, many 변화되면 스토리지에 상태 저장
@@ -265,7 +278,7 @@ whale.storage.onChanged.addListener(function (changes, namespace) {
 
 // 사이드바 열려있는지 체크
 var is_open = false;
-whale.sidebarAction.onClicked.addListener(function() {
+whale.sidebarAction.onClicked.addListener(function(result) {
   if(result.opened) {
     is_open = true;
   } else {

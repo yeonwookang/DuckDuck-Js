@@ -2,7 +2,7 @@ $(function () {
 
     // 인물 여럿 감지시 알림 여부 (동기화)
     whale.storage.sync.get(['many'], function(result) {
-        if(result.toggle){ $('#checkbox2[data-type=many]').click();}
+        if(result.many){ $('#checkbox2[data-type=many]').click();}
     });
 
     // 체크박스 클릭 될 때
