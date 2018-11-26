@@ -19,12 +19,6 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
        url = item.url;
        mime = item.mime; //mime
 
-       // 중복 체크
-       /*var isDuplicated = bytesCheck(url, item.totalBytes);
-       if(isDuplicated) {
-         confirm("중복된 이미지입니다.");
-       }*/
-
        console.log("url(script.js): " + url +"\nmime(script.js): " + mime);
 
        // 이미지 mime을 확장자로 변환
@@ -108,22 +102,31 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     for(var i = 0; i < faces.length; i++) {
                       people[i] = faces[i].celebrity.value;
                       confidences[i] = faces[i].celebrity.confidence;
-                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
-
                     }
 
-                    // 기본 파일 이름은 가장 신뢰도가 높은 인물로
-                    var max_confidences = confidences[0];
-                    var max_index = 0;
-                    for(var i = 0; i < count; i++) {
-                      if(max_confidences < confidences[i]) {
-                        max_confidences = confidences[i];
-                        max_index = i;
+                    // 신뢰도 높은 순으로 정렬
+                    var temp;
+                    for(var i=confidences.length; i>0; i--) {
+                      for (var j=0; j<i-1; j++) {
+                        if(confidences[j] < confidences[j+1]) {
+                          temp = confidences[j]; 
+                          confidences[j] = confidences[j+1];
+                          confidences[j+1] = temp;
+	                    
+                          temp = people[j]; 
+                          people[j] = people[j+1];
+                          people[j+1] = temp;
+                        }
                       }
                     }
+
+                    for(var i = 0; i < people.length; i++) {
+                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
+                    }
+
                     // 신뢰도가 최고값인 인물의 이름
-                    filename = people[max_index];
-                    var conf = (confidences[max_index]*100).toFixed(2);
+                    filename = people[0];
+                    var conf = (confidences[0]*100).toFixed(2);
 
                     // 분석 결과 알림창
                     var mess = "분석결과\n" + filename + " (" + conf + "%)";
