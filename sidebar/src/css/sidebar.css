@@ -142,12 +142,17 @@ input:checked + .slider:before {
   margin: 0 auto;
   table-layout: fixed;
   border-collapse: collapse;
+  width: 97%;
 }
 .inner tr {
   border: 1px solid  #1B296D;
 }
 .inner .path {
   text-align: left;
+  word-break: break-all;
+}
+.selected_v2 {
+  display: none;
 }
 .blind {
   visibility:hidden;
