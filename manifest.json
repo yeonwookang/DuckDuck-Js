@@ -5,7 +5,7 @@
     "version": "1.0",
 
     "sidebar_action": {
-      "default_page": "sidebar/sidebar_v2.html",
+      "default_page": "sidebar/sidebar.html",
       "default_icon": "icon/duck-icon.png",
 
       "default_title": "어덕편덕",
