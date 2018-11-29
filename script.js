@@ -5,6 +5,8 @@ var i =0;
 
 var toggle = true; // 토글 버튼 초기 상태
 var many = true; // 인물 여러명 감지시 알림 여부 상태
+var flag = false;
+
 
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
@@ -12,6 +14,25 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var mime; // 파일 종류
     var file_type; // 파일 종류 => 파일 확장자
     var filename; // 파일 이름
+    
+
+
+    //중복 체크. 함수로 빼두었더니 에러나고 순서가 이상.. 추후 수정예정
+    whale.downloads.search({
+      orderBy: ['-startTime'],
+      exists: true,
+      startedBefore: item.startTime,
+      url: item.url
+    }, downloadedItems => {
+      downloadedItems.some(item => {
+        if((item.filename).length!=0) {
+          alert('중복된 이미지입니다. ');
+          flag = true;
+          return true;
+        }
+      });  
+    });
+
 
     // 켜져있을 때만
      if(toggle) {
@@ -89,6 +110,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       suggest({filename: item.filename});
                     } else { // 파일 이름 수정
                       filename = prompt("어떤 이름으로 저장할까요?", "");
+                      filename = characterCheck (filename);
+
                       if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                         alert("유효하지 않은 파일 이름입니다.");
                         suggest({filename: item.filename});
@@ -145,6 +168,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                     if(many) {
                       if(count > 1) {
                         filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
+                        filename = characterCheck(filename);
+                        
                         if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                           alert("유효하지 않은 파일 이름입니다.");
                           suggest({filename: item.filename});
@@ -154,6 +179,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                           var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
                           if(!fail_confirm) { // 파일 이름 수정
                             filename = prompt("어떤 이름으로 저장할까요?", "");
+                            filename = characterCheck (filename);
+
                             if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                               alert("유효하지 않은 파일 이름입니다.");
                               suggest({filename: item.filename});
@@ -168,6 +195,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                         var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
                         if(!fail_confirm) { // 파일 이름 수정
                           filename = prompt("어떤 이름으로 저장할까요?", "");
+                          filename = characterCheck(filename);
+
                           if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                             alert("유효하지 않은 파일 이름입니다.");
                             suggest({filename: item.filename});
@@ -192,6 +221,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                   suggest({filename: item.filename});
                 } else { // 파일 이름 수정
                   filename = prompt("어떤 이름으로 저장할까요?", "");
+                  filename = characterCheck(filename);
+
                   if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                     alert("유효하지 않은 파일 이름입니다.");
                     suggest({filename: item.filename});
@@ -209,42 +240,16 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
    }
 });
 
-//이미지의 url과 bytes를 인자로 넣어준다.
-function bytesCheck(fileUrl, bytes) {
-    /* 최근 순으로 bytes가 같고, 현재 존재하는 다운로드 아이템 5개를 가지고 온다.
-    다운로드된 파일의 경로를 fileArray 배열에 담는다. */
-    whale.downloads.search({
-        orderBy: ['-startTime'],
-        totalBytes: bytes,
-        exists: true,
-        limit: 5
-    }, downloadedItems => {
-        downloadedItems.forEach(item => {
-            fileArray[i++] = item.filename;
 
-            //다운로드 한 파일의 url과 기존 파일의 다운로드 url이 같다면 중복 가능성이 있으므로 treu값을 넘긴다.
-            if(fileUrl == item.url)
-                return true;
-        });
-    });
-
-    //같은 바이트인 파일은 중복 가능성이 있으므로 ture값 넘긴다.
-    if(fileArray.length!=0)
-
-        return true;
-    else
-        return false;
+//특수문자 확인
+function characterCheck (filename) {
+  var name = filename;
+  var special_pattern = /[`<>.~@#$%^&*|\\\'\";:\/?]/gi; 
+  while(special_pattern.test(name)) { 
+    name = prompt('특수문자가 포함되어 있습니다.\n다시 입력해주세요.');
+  }
+  return name;
 }
-
-//이미지 좌표의 rgb값 비교 메소드
-
-
-
-
-
-
-
-
 
 
 // toggle: 최초 다운로드시에 true /  many: 최초 다운로드시에 true
