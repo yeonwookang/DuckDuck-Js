@@ -9,6 +9,7 @@ body {
   height: 100%;
   font-family: helvetica, '나눔고딕', 'Nanum Gothic', sans-serif;
   color: #453A63;
+  font-size: 13px;
 }
 .header {
   height: 48px;
@@ -63,6 +64,7 @@ body {
   background: url(../img/history.png) no-repeat;
   background-size: auto 45px;
   border: 1px solid #453A63;
+  border-right: none;
   width: 48px;
   position: absolute;
   top: -1px;
@@ -128,13 +130,16 @@ input:checked + .slider:before {
   right: 0;
   bottom: 0;
   overflow: auto;
-  padding: 15px;
+}
+#container .content .inner h2 {
+  padding-left: 15px;
 }
 .content .btn_hint {
   text-align: left;
   margin-left: 75px;
   font-size: 15px;
   margin-top: 5px;
+  padding-top: 13px;
 }
 .inner_layer {
   text-align: center;
@@ -156,9 +161,18 @@ tr {
 td {
   text-align: left;
   word-break: break-all;
+  padding: 5px 0;
 }
 .selected_v2 {
   display: none;
+}
+dl {
+  padding: 0 15px;
+  font-size: 15px;
+}
+dd {
+  margin-left: -1px;
+  padding-bottom: 10px;
 }
 .blind {
 	visibility: hidden;
