@@ -10,8 +10,10 @@ $(function () {
         var checked = $('#checkbox2').is(":checked");
         if(checked) {
             whale.storage.sync.set({'many': true});
+            $('#same_img').removeClass('selected_v2');
         }else {
             whale.storage.sync.set({'many': false});
+            $('#same_img').addClass('selected_v2');
         }
     });
 

@@ -11,22 +11,24 @@ body {
   color: #453A63;
   font-size: 13px;
 }
+.inner {
+  min-width: 390px;
+  max-width: 590px;
+  margin: 0 auto;
+  position: relative;
+}
+/* header */
 .header {
   background-color: #0b0c46;
   height: 98px;
   border: 1px solid #453A63;
   position: relative;
   z-index: 10;
-}
-.header .inner {
   text-align: center;
 }
 .header .inner h1 {
   color: #fff;
   letter-spacing: 2px;
-}
-.header .nav {
-  text-align: center;
 }
 .header .inner h1:after {
   content: '';
@@ -40,39 +42,6 @@ body {
   right: 5px;
   top: -4px;
 }
-#container {
-  height: 100%;
-  background-color: #f2f1f1;
-  margin-top: -120px;
-  position: relative;
-}
-.footer {
-  line-height: 20px;
-  text-align: center;
-  background-color: #f2f1f1;
-}
-.footer .inner {
-  color: #0b0c46;
-}
-.inner {
-  min-width: 390px;
-  max-width: 590px;
-  margin: 0 auto;
-  position: relative;
-}
-.btn_type {
-  background-color: #0b0c46;
-  font-weight: bold;
-  color: #fff;
-  width: 30%;
-  height: 30px;
-  cursor: pointer;
-  border: none;
-}
-.btn_type.selected {
-  color: #3bd3d0;
-}
-/* 토글 버튼 */
 .switch {
   position: absolute;
   width: 60px;
@@ -124,7 +93,25 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-/* 토글 버튼_여러명 인식 알림 */
+/* container */
+#container {
+  height: 100%;
+  background-color: #f2f1f1;
+  margin-top: -120px;
+  position: relative;
+}
+.btn_type {
+  background-color: #0b0c46;
+  font-weight: bold;
+  color: #fff;
+  width: 30%;
+  height: 30px;
+  cursor: pointer;
+  border: none;
+}
+.btn_type.selected {
+  color: #3bd3d0;
+}
 .switch2 {
   position: absolute;
   width: 50px;
@@ -179,7 +166,7 @@ input:checked + .slider2:before {
 /* content */
 #container .content .inner {
   position: absolute;
-  top: 120px;
+  top: 130px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -203,7 +190,9 @@ input:checked + .slider2:before {
   padding-top: 13px;
 }
 .inner_layer {
-  padding-top: 10px;
+  margin: 15px auto;
+  width: 90%;
+  padding: 10px 0;
   text-align: center;
   background-color: #fff;
   box-shadow: 10px 10px 10px gray;
@@ -211,6 +200,30 @@ input:checked + .slider2:before {
 .img_info p {
   margin-left: 10px;
   text-align: left;
+}
+li {
+  text-align: left;
+  padding-bottom: 10px;
+}
+ul li {
+  list-style: none;
+  margin-left: 0;
+  display: inline-block;
+}
+.user_answer button {
+  font-weight: bold;
+  width: 80px;
+  line-height: 35px;
+  border-radius: 10px;
+  background-color: #0b0c46;
+  margin: 0 10px;
+  border: 1px solid #0b0c46;
+  color: #fff;
+  cursor: pointer;
+}
+.user_answer button:hover {
+  background-color: #fff;
+  color: #0b0c46;
 }
 /* 다운로드 히스토리 */
 table {
@@ -220,23 +233,38 @@ table {
   width: 97%;
 }
 tr {
-  border: 1px solid  #1B296D;
+  border-bottom: 1px solid  #1B296D;
+}
+th {
+  color: #3bd3d0;
+  padding: 10px 0;
 }
 td {
-  text-align: left;
   word-break: break-all;
-  padding: 5px 0;
+  padding: 10px 0;
+}
+.file_dir {
+  text-align: left;
 }
 .selected_v2 {
   display: none;
 }
 dl {
+  text-align: left;
   padding: 0 15px;
   font-size: 15px;
 }
 dd {
   margin-left: -1px;
   padding-bottom: 10px;
+}
+.footer {
+  line-height: 20px;
+  text-align: center;
+  background-color: #f2f1f1;
+}
+.footer .inner {
+  color: #0b0c46;
 }
 .blind {
 	visibility: hidden;

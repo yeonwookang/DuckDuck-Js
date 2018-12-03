@@ -7,7 +7,7 @@ document.addEventListener(`visibilitychange`, function() {
 });
 
 
-// 다운로드 히스토리 
+// 다운로드 히스토리
 function downloadHistory () {
     var fileHistory = [];
     whale.downloads.search({
@@ -15,7 +15,7 @@ function downloadHistory () {
     }, downloadedItems => {
         var i=0;
         downloadedItems.forEach(item => {
-            if(item.filename.length!=0) {                
+            if(item.filename.length!=0) {
                 switch(item.mime) {
                     case 'image/gif':
                     case 'image/png':
@@ -26,7 +26,7 @@ function downloadHistory () {
                         var file_name = item.filename.split('\\');
                         var date = item.startTime.substring(0,10);
                         fileHistory[i] = [date,file_name[file_name.length-1],item.filename, item.url];
-                        $('#historyTable > tbody:last').append('<tr><td>'+fileHistory[i][0]+'</td><td>'+fileHistory[i][1] +'</td><td>'+fileHistory[i++][2] +'</td></tr>');
+                        $('#historyTable > tbody:last').append('<tr><td>'+fileHistory[i][0]+'</td><td>'+fileHistory[i][1] +'</td><td class="file_dir">'+fileHistory[i++][2] +'</td></tr>');
                 }
             }
         });
