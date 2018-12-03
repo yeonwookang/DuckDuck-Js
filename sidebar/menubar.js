@@ -12,7 +12,7 @@ $(document).ready(function() {
       // 네비게이션 설정
       $(this).addClass('selected');
       $('#history_btn').removeClass('selected');
-      $('#faq_btn').addClass('selected');
+      $('#faq_btn').removeClass('selected');
 
       // inner 설정
       $('#home').removeClass('selected_v2');

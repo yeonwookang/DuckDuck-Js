@@ -12,13 +12,16 @@
   <!-- HEADER -->
   <div class="header">
     <div class="inner">
-      <button type="button" class="btn_type btn_home selected" id="home_btn"><span class="blind">HOME</span></button>
-        <button type="button" class="btn_type btn_faq" id="history_btn"><span class="blind">HOME</span></button>
-        <button type="button" class="btn_type btn_history" id="faq_btn"><span class="blind">FAQ</span></button>
-        <label class="switch checkboxlabel">
-          <input type="checkbox" id="checkbox1" class="checkbox" data-type="toggle">
-          <span class="slider round lever" id="lever"></span>
-        </label>
+      <label class="switch checkboxlabel">
+        <input type="checkbox" id="checkbox1" class="checkbox" data-type="toggle">
+        <span class="slider round lever" id="lever"></span>
+      </label>
+      <h1>어덕편덕</h1>
+    </div>
+    <div class="nav">
+      <button type="button" class="btn_type selected" id="home_btn">메인으로</button>
+      <button type="button" class="btn_type" id="faq_btn">다운로드 히스토리</button>
+        <button type="button" class="btn_type btn_ctr" id="history_btn">사용방법</button>
     </div>
   </div>
   <!-- //HEADER -->
@@ -27,21 +30,21 @@
     <div class="content">
       <div class="content inner" id="home">
         <!-- 인물 여러명 인식 시 알림-->
-        <label class="switch checkboxlabel" style="top:10px;left: 10px; z-index:99999">
+        <label class="switch2 checkboxlabel" style="top:13px;left: 200px; z-index:99999">
           <input type="checkbox" id="checkbox2" class="checkbox" data-type="many">
-          <span class="slider round lever" id="lever"></span>
+          <span class="slider2 round lever" id="lever"></span>
         </label>
         <p class="btn_hint">인물 여러명 인식시 알림</p>
 
         <!-- case1-1. 기본 -->
         <div class="inner_layer">
-          <h2 class="text_left">다운로드 받은 이미지</h2>
-          <img id = "thumb_img" src="../icon/duck.PNG" height=250 class="thumb" alt="다운받은이미지">
+          <h2 class="text_left">최근 다운로드한 이미지</h2>
           <div class="text_left img_info">
             <p><strong>다운로드 날짜 :</strong><span id="date"></span></p>
             <p><strong>파일명 :</strong><span id="filename"></span></p>
             <p><strong>경로 :</strong><span id="path"></span></p>
           </div>
+          <img id = "thumb_img" src="../icon/duck.PNG" height=250 class="thumb" alt="다운받은이미지">
         </div>
         <!-- case1-2. 중복확인 -->
         <div class="inner_layer selected_v2">
@@ -97,7 +100,7 @@
   <!-- //CONTAINER -->
   <!-- FOOTER -->
   <div class="footer">
-    <div class="inner">Copyright © 어덕편덕 Corp. All Rights Reserved.</div>
+    <div class="inner"><strong>Copyright © 어덕편덕 Corp. All Rights Reserved.</strong></div>
   </div>
   <!-- //FOOTER -->
   <script src="../jquery-3.3.1.min.js"></script>
