@@ -26,7 +26,7 @@ function downloadHistory () {
                         var file_name = item.filename.split('\\');
                         var date = item.startTime.substring(0,10);
                         fileHistory[i] = [date,file_name[file_name.length-1],item.filename, item.url];
-                        $('#historyTable > tbody:last').append('<tr><td>'+fileHistory[i][0]+'</td><td>'+fileHistory[i][1] +'</td><td class="file_dir">'+fileHistory[i++][2] +'</td></tr>');
+                        $('#historyTable > tbody:last').append('<tr><td>'+((fileHistory[i][0]).substring(2,10)).replace(/-/g, "/")+'</td><td>'+fileHistory[i][1] +'</td><td class="file_dir">'+fileHistory[i++][2] +'</td></tr>');
                 }
             }
         });

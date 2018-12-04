@@ -42,6 +42,7 @@ body {
   position: absolute;
   right: 5px;
   top: -4px;
+  margin-right: 20px;
 }
 .switch {
   position: absolute;
@@ -49,6 +50,7 @@ body {
   height: 34px;
   left: 5px;
   top: -1px;
+  margin-left: 20px;
 }
 .switch input {
   opacity: 0;
@@ -177,11 +179,12 @@ input:checked + .slider2:before {
   font-size: 16px;
   background-color: #0b0c46;
   color: #fff;
-  width: 180px;
-  border-radius: 2em;
+  width: 190px;
+  border-radius: 1.25em;
   padding: 3px 0 3px 0;
   margin-left: 20px;
   text-align: center;
+  margin-bottom: 30px;
 }
 .content .btn_hint {
   font-weight: bold;
@@ -245,7 +248,7 @@ table {
   width: 97%;
 }
 tr {
-  border-bottom: 1px solid  #1B296D;
+  border-bottom: 1px solid  rgba(0, 0, 0, 0.2);
 }
 th {
   color: #3bd3d0;
@@ -254,6 +257,7 @@ th {
 td {
   word-break: break-all;
   padding: 10px 0;
+  font-size: 10px;
 }
 .file_dir {
   text-align: left;
@@ -264,7 +268,6 @@ td {
 dl {
   text-align: left;
   padding: 0 15px;
-  font-size: 15px;
 }
 dt {
   margin-bottom: 10px;
@@ -274,7 +277,7 @@ dd {
   padding-bottom: 10px;
   list-style-position: outside;
   list-style: disc;
-  margin-bottom:15px;
+  margin-bottom:30px;
 }
 .footer {
   line-height: 20px;

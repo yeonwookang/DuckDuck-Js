@@ -7,15 +7,12 @@ var toggle = true; // 토글 버튼 초기 상태
 var many = true; // 인물 여러명 감지시 알림 여부 상태
 var flag = false;
 
-
 // 다운로드 클릭시 파일 경로 및 이름 지정
 whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var url; // 다운로드 url
     var mime; // 파일 종류
     var file_type; // 파일 종류 => 파일 확장자
     var filename; // 파일 이름
-
-
 
     //중복 체크. 함수로 빼두었더니 에러나고 순서가 이상.. 추후 수정예정
     whale.downloads.search({
@@ -81,7 +78,9 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
               method: "POST",
               async: false, // 동기식으로 통신
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
-              beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });}, // 로딩중 배지 색상 변경 (주황), 알림창
+              beforeSend: function() {
+                whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });// 로딩중 배지 색상 변경 (주황), 알림창
+              },
               complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });}, // 완료후 배지 색상 (초록)
               data: {img_url : url, file_type: file_type }, // 원본 url, 확장자
               error: function() {alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");}
