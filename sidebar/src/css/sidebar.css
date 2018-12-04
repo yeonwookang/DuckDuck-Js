@@ -100,7 +100,7 @@ input:checked + .slider:before {
 #container {
   height: 100%;
   background-color: #f2f1f1;
-  margin-top: -120px;
+  margin-top: -140px;
   position: relative;
 }
 .btn_type {
@@ -169,7 +169,7 @@ input:checked + .slider2:before {
 /* content */
 #container .content .inner {
   position: absolute;
-  top: 130px;
+  top: 140px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -280,7 +280,7 @@ dd {
   margin-bottom:30px;
 }
 .footer {
-  line-height: 20px;
+  height: 40px;
   text-align: center;
   background-color: #f2f1f1;
 }
