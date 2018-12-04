@@ -177,8 +177,9 @@ input:checked + .slider2:before {
   font-size: 16px;
   background-color: #0b0c46;
   color: #fff;
-  width: 200px;
+  width: 180px;
   border-radius: 2em;
+  padding: 3px 0 3px 0;
   margin-left: 20px;
   text-align: center;
 }
@@ -199,14 +200,22 @@ input:checked + .slider2:before {
   border: 1px solid #EAEAEA;
   border-radius: 3px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
+
 }
 .img_info p {
   margin-left: 10px;
   text-align: left;
 }
 li {
+  margin-left: 0;
   text-align: left;
   padding-bottom: 10px;
+  padding-right: 20px;
+}
+ol li {
+  margin-left: 0;
+  list-style-position: outside;
+  margin-bottom: 20px;
 }
 ul li {
   list-style: none;
@@ -257,9 +266,15 @@ dl {
   padding: 0 15px;
   font-size: 15px;
 }
+dt {
+  margin-bottom: 10px;
+}
 dd {
-  margin-left: -1px;
+  margin-left: 10px;
   padding-bottom: 10px;
+  list-style-position: outside;
+  list-style: disc;
+  margin-bottom:15px;
 }
 .footer {
   line-height: 20px;
@@ -279,4 +294,10 @@ dd {
 	height: 1px;
 	font-size: 0;
 	line-height: 0;
+}
+
+.email {
+  text-decoration: none;
+  color:#3bd3d0;
+  font-weight: bold;
 }
