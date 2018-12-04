@@ -8,7 +8,7 @@ $(function () {
     // toggle 버튼이 클릭 될 때
     $('.checkbox[data-type=toggle]').on('click', function () {
         var color = $('#lever').css('background-color'); // 레버의 색상으로 판별
-        if(color==='rgb(69, 58, 99)') { //눌러지는 타이밍 기준 배경색이 회색이 아니면
+        if(color==='rgb(59, 211, 208)') { //눌러지는 타이밍 기준 배경색이 회색이 아니면
             whale.storage.sync.set({'toggle': false}); // 서비스 끄기
         }else if(color==='rgb(204, 204, 204)'){
             whale.storage.sync.set({'toggle': true}); // 서비스 켜기

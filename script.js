@@ -14,7 +14,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
     var mime; // 파일 종류
     var file_type; // 파일 종류 => 파일 확장자
     var filename; // 파일 이름
-    
+
 
 
     //중복 체크. 함수로 빼두었더니 에러나고 순서가 이상.. 추후 수정예정
@@ -30,7 +30,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
           flag = true;
           return true;
         }
-      });  
+      });
     });
 
 
@@ -79,11 +79,12 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
           // Ajax
             $.ajax({
               method: "POST",
-              async: false, // 동기식으로 통산
+              async: false, // 동기식으로 통신
               url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
               beforeSend: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });}, // 로딩중 배지 색상 변경 (주황), 알림창
               complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });}, // 완료후 배지 색상 (초록)
-              data: {img_url : url, file_type: file_type } // 원본 url, 확장자
+              data: {img_url : url, file_type: file_type }, // 원본 url, 확장자
+              error: function() {alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");}
             }).done(function( data ) {
 
               data = data.toString();
@@ -169,7 +170,7 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
                       if(count > 1) {
                         filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
                         filename = characterCheck(filename);
-                        
+
                         if(filename == null) { // 공백을 입력하면 원본이름으로 저장
                           alert("유효하지 않은 파일 이름입니다.");
                           suggest({filename: item.filename});
@@ -244,8 +245,8 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 //특수문자 확인
 function characterCheck (filename) {
   var name = filename;
-  var special_pattern = /[`<>.~@#$%^&*|\\\'\";:\/?]/gi; 
-  while(special_pattern.test(name)) { 
+  var special_pattern = /[`<>.~@#$%^&*|\\\'\";:\/?]/gi;
+  while(special_pattern.test(name)) {
     name = prompt('특수문자가 포함되어 있습니다.\n다시 입력해주세요.');
   }
   return name;
@@ -256,8 +257,18 @@ function characterCheck (filename) {
 whale.runtime.onInstalled.addListener(function (details) {
     whale.storage.sync.set({'toggle': true});
     whale.storage.sync.set({'many': true});
-    whale.sidebarAction.setBadgeText({text: "O"});
-    whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });
+
+});
+
+// 웨일 브라우저 실행할 때 아이콘 설정
+whale.storage.sync.get(['toggle'], function(result) {
+    console.log("toggle(storage): " + result.toggle);
+    if(result.toggle == true) {
+      whale.sidebarAction.setBadgeText({text: "O"});
+      whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });
+    } else {
+      whale.sidebarAction.setBadgeText({text: ""});
+    }
 
 });
 
@@ -270,6 +281,7 @@ whale.storage.onChanged.addListener(function (changes, namespace) {
           console.log("toggle: " + toggle);
           if(toggle) {
             whale.sidebarAction.setBadgeText({text: "O"});
+            whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });
           } else {
             whale.sidebarAction.setBadgeText({text: ""});
           }
