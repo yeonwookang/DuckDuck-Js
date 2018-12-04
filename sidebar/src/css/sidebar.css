@@ -181,17 +181,13 @@ input:checked + .slider2:before {
   color: #fff;
   width: 190px;
   border-radius: 1.25em;
-  padding: 3px 0 3px 0;
-  margin-left: 20px;
-  text-align: center;
-  margin-bottom: 30px;
+  padding: 3px 0;
+  margin: 0 0 30px 20px;
 }
 .content .btn_hint {
   font-weight: bold;
-  text-align: left;
-  margin-left: 25px;
+  margin: 5px 0 0 25px;
   font-size: 15px;
-  margin-top: 5px;
   padding-top: 13px;
 }
 .inner_layer {
@@ -206,19 +202,17 @@ input:checked + .slider2:before {
 
 }
 .img_info p {
-  margin-left: 10px;
+  margin-left: 25px;
   text-align: left;
 }
 li {
   margin-left: 0;
   text-align: left;
-  padding-bottom: 10px;
-  padding-right: 20px;
+  padding: 0 20px 10px 0;
 }
 ol li {
-  margin-left: 0;
+  margin: 0 0 20px 0;
   list-style-position: outside;
-  margin-bottom: 20px;
 }
 ul li {
   list-style: none;
