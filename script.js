@@ -1,7 +1,6 @@
 var fileUrl = '';
 var bytes = 0;
 var fileArray = new Array();
-var i =0;
 
 var toggle = true; // 토글 버튼 초기 상태
 var many = true; // 인물 여러명 감지시 알림 여부 상태
@@ -229,15 +228,23 @@ whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
 
 
 //특수문자 확인
-//왜 반복이 안될까... 
 function characterCheck (filename) {
   var name = filename;
-  var special_pattern = /[:|?<>*\\\/\"]/gi;
-
-  while(special_pattern.test(name)) {
-    name = prompt('특수문자가 포함되어 있습니다.\n다시 입력해주세요.');
+  var pattern = [':', '|', '?' , '<' , '>' ,'*', '\"', '\\', '\/'];
+  var flag;
+  while(true) {
+    flag = true;
+    pattern.some(item => {
+      if(name.includes(item)) {
+        flag = false;
+        return true;
+      }
+    });
+    if(flag == false)
+      name = prompt('특수문자가 포함되어 있습니다.\n다시 입력해주세요.');
+    else 
+     return name;
   }
-  return name;
 }
 
 //콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크 
