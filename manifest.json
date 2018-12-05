@@ -29,5 +29,10 @@
             "description": "사이드바 On/Off 단축키"
         }
     },
-    "permissions": ["downloads", "storage", "notifications", "<all_urls>"]
+    "icons": {
+        "16": "icon/duck-icon.png",
+        "48": "icon/duck-icon.png",
+        "128": "icon/duck-icon.png"
+    },
+    "permissions": ["downloads", "storage", "notifications", "<all_urls>" , "contextMenus"]
   }
