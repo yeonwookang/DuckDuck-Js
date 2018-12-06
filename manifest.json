@@ -34,5 +34,5 @@
         "48": "icon/duck-icon.png",
         "128": "icon/duck-icon.png"
     },
-    "permissions": ["downloads", "storage", "notifications", "<all_urls>" , "contextMenus"]
+    "permissions": ["downloads", "storage", "notifications", "<all_urls>" , "contextMenus", "tabs"]
   }

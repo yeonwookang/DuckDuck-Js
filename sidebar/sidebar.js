@@ -6,12 +6,17 @@ document.addEventListener(`visibilitychange`, function() {
     location.reload();
 });
 
+// 설정 바로가기 클릭시 새로운 탭에 설정 바로가기 열림
+$('#setting').click(function(){
+    whale.tabs.create({'url': 'whale://settings/download'});
+});
 
 // 다운로드 히스토리
 function downloadHistory () {
     var fileHistory = [];
     whale.downloads.search({
-        orderBy: ['-startTime']
+        orderBy: ['-startTime'],
+        exists: true
     }, downloadedItems => {
         var i=0;
         downloadedItems.forEach(item => {
