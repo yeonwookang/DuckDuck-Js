@@ -41,7 +41,7 @@ function ctmClick(item) {
     return;
   }
 
-  //확장자 추출
+  //맨 뒤 확장자 추출
   switch(file_type[file_type.length-1]) {
     case 'gif':
       file_type = ".gif";
@@ -67,19 +67,25 @@ function ctmClick(item) {
 
     default:
 
-      //확장자 없는 이미지 주소 처리
+      //이미지 주소에 확장자 있는 경우
       if(img_url.toLowerCase().includes('jpg') || img_url.toLowerCase().includes('jpeg') )
-      {
         file_type = ".jpg";     
-        file_name = 'p';
-      } 
-      else if( img_url.includes('gif') ) {
-        file_type = ".gif";     
-        file_name = 'p';
+      else if(img_url.toLowerCase().includes('gif')) 
+        file_type = ".gif";    
+      else if(img_url.toLowerCase().includes('png')) 
+        file_type = ".png";     
+      else if(img_url.toLowerCase().includes('bmp')) 
+        file_type = ".bmp";     
+      else if(img_url.toLowerCase().includes('webp')) 
+        file_type = ".webp";     
+      else if(img_url.toLowerCase().includes('ico')) 
+        file_type = ".ico";  
+      
+      //이미지 주소에 확장자 없는 경우 (수정필요)
+      else {        
+        file_type = '.jpg';
+
       }
-      else 
-      //url에 확장자가 없는 경우 임시로 jpg로 넘김
-      file_type = '.jpg';
 
     break;
   }
