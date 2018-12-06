@@ -8,243 +8,21 @@ var flag = false;
 
 
 
-/*
-// 다운로드 클릭시 파일 경로 및 이름 지정
-whale.downloads.onDeterminingFilename.addListener(function(item, suggest) {
-    var url; // 다운로드 url
-    var mime; // 파일 종류
-    var file_type; // 파일 종류 => 파일 확장자
-    var filename; // 파일 이름
-
-
-    // 켜져있을 때만
-     if(toggle) {
-       // download url 가져오기
-       url = item.url;
-       mime = item.mime; //mime
-
-       console.log("url(script.js): " + url +"\nmime(script.js): " + mime);
-
-       // 이미지 mime을 확장자로 변환
-       switch(mime) {
-         case 'image/gif':
-           file_type = ".gif";
-         break;
-         case 'image/png':
-           file_type = ".png";
-         break;
-         case 'image/jpeg':
-           file_type = ".jpg";
-         break;
-         case 'image/bmp':
-           file_type = ".bmp";
-         break;
-         case 'image/webp':
-           file_type = ".webp";
-         break;
-         case 'image/vnd.microsoft.icon':
-           file_type = ".ico";
-         break;
-
-         default: break;
-     }
-
-      // 이미지인 경우만 CFR API 호출
-	    switch(mime) {
-	    	case 'image/gif':
-	    	case 'image/png':
-	    	case 'image/jpeg':
-	    	case 'image/bmp':
-	    	case 'image/webp':
-	    	case 'image/vnd.microsoft.icon':
-
-        if(file_type) {
-          // Ajax
-            $.ajax({
-              method: "POST",
-              async: false, // 동기식으로 통신
-              url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
-              beforeSend: function() {
-                whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });// 로딩중 배지 색상 변경 (주황), 알림창
-              },
-              complete: function() {whale.sidebarAction.setBadgeBackgroundColor({ color: [29, 219 ,22, 255] });}, // 완료후 배지 색상 (초록)
-              data: {img_url : url, file_type: file_type }, // 원본 url, 확장자
-              error: function() {alert("서버와의 통신에 실패했습니다. 다시 시도해주세요.");}
-            }).done(function( data ) {
-
-              data = data.toString();
-              data = data.replace(/\n/g, "");//행바꿈제거
-              data = data.replace(/\r/g, "");//엔터제거
-              data = data.replace(/'/g, '"');// 작은따옴표를 큰따옴표로 변경 (json 객체 생성시 에러 방지)
-
-              console.log("data(script.js): " + data); // 문자열
-
-              try {
-                  var celObj = JSON.parse(data); // json 객체 생성
-
-                  // json 객체에서 정보 추출
-                  var count = celObj.info.faceCount; // 인물 수
-                  var faces = celObj.faces; // 인물 정보가 담긴 json Array
-                  var people = new Array(count); // 인물의 수만큼 배열 (인물이름)
-                  var confidences = new Array(count); // 신뢰도
-
-                  // 인물을 찾지 못한 경우
-                  if(count <= 0) {
-                    var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
-                    // 원본 이름으로 저장
-                    if(fail_confirm) {
-                      suggest({filename: item.filename});
-                    } else { // 파일 이름 수정
-                      filename = prompt("어떤 이름으로 저장할까요?", "");
-                      filename = characterCheck (filename);
-
-                      if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                        alert("유효하지 않은 파일 이름입니다.");
-                        suggest({filename: item.filename});
-                      }
-                    }
-
-                  } else {
-
-                    var message = ""; // 인식된 인물 이름과 신뢰도 메시지
-                    // 인물 정보 배열에 저장하기
-                    for(var i = 0; i < faces.length; i++) {
-                      people[i] = faces[i].celebrity.value;
-                      confidences[i] = faces[i].celebrity.confidence;
-                    }
-
-                    // 신뢰도 높은 순으로 정렬
-                    var temp;
-                    for(var i=confidences.length; i>0; i--) {
-                      for (var j=0; j<i-1; j++) {
-                        if(confidences[j] < confidences[j+1]) {
-                          temp = confidences[j];
-                          confidences[j] = confidences[j+1];
-                          confidences[j+1] = temp;
-
-                          temp = people[j];
-                          people[j] = people[j+1];
-                          people[j+1] = temp;
-                        }
-                      }
-                    }
-
-                    for(var i = 0; i < people.length; i++) {
-                      message = message + (i+1) + ". " + people[i] + " (" + (confidences[i] * 100).toFixed(2) + "%)\n";
-                    }
-
-                    // 신뢰도가 최고값인 인물의 이름
-                    filename = people[0];
-                    var conf = (confidences[0]*100).toFixed(2);
-
-                    // 분석 결과 알림창
-                    var mess = "분석결과\n" + filename + " (" + conf + "%)";
-                    var opt = {
-                      type: "basic",
-                      title: "어덕편덕",
-                      message: mess,
-                      iconUrl: "icon/duck.PNG"
-                    };
-
-                    if(count == 1) {
-                      whale.notifications.create(opt);
-                    }
-
-                    // '인물 여럿 인식시 알림' 체크되어있는 경우
-                    if(many) {
-                      if(count > 1) {
-                        filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
-                        filename = characterCheck(filename);
-
-                        if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                          alert("유효하지 않은 파일 이름입니다.");
-                          suggest({filename: item.filename});
-                        }
-                      } else if(count == 1) {
-                        if(conf <= 60.0) {
-                          var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
-                          if(!fail_confirm) { // 파일 이름 수정
-                            filename = prompt("어떤 이름으로 저장할까요?", "");
-                            filename = characterCheck (filename);
-
-                            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                              alert("유효하지 않은 파일 이름입니다.");
-                              suggest({filename: item.filename});
-                            }
-                          }
-                        }
-                      }
-
-                    } else {
-                      // 신뢰도가 60%이하인 경우 인식 실패 알림
-                      if(conf <= 60.0) {
-                        var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
-                        if(!fail_confirm) { // 파일 이름 수정
-                          filename = prompt("어떤 이름으로 저장할까요?", "");
-                          filename = characterCheck(filename);
-
-                          if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                            alert("유효하지 않은 파일 이름입니다.");
-                            suggest({filename: item.filename});
-                          }
-                        }
-                      }
-                    }
-
-                    // 최종 경로: .../download/인물이름/인물이름(n).xxx
-                    try {
-                      suggest({filename:  filename + "/" + filename + file_type});
-                    } catch(e) {
-                      suggest({filename:  item.filename});
-                    }
-                  }
-
-              }
-              catch(exception){
-                var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
-                // 원본 이름으로 저장
-                if(fail_confirm) {
-                  suggest({filename: item.filename});
-                } else { // 파일 이름 수정
-                  filename = prompt("어떤 이름으로 저장할까요?", "");
-                  filename = characterCheck(filename);
-
-                  if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                    alert("유효하지 않은 파일 이름입니다.");
-                    suggest({filename: item.filename});
-                  }
-                }
-              } finally {
-                console.log("filename(script.js): " + filename);
-              }
-          });
-        }
-	    	break;
-
-	    	default:break;
-	    }
-   }
-}); */
-
-
-//특수문자 확인
-function characterCheck (filename) {
-  var name = filename;
-  var pattern = [':', '|', '?' , '<' , '>' ,'*', '\"', '\\', '\/'];
-  var flag;
-  while(true) {
-    flag = true;
-    pattern.some(item => {
-      if(name.includes(item)) {
-        flag = false;
-        return true;
-      }
-    });
-    if(flag == false)
-      name = prompt('특수문자가 포함되어 있습니다.\n다시 입력해주세요.');
-    else 
-     return name;
+function validCheck(obj){
+  if(obj == null ) {
+    alert('유효하지 않은 이름입니다.');
+    return false;
   }
+	if(obj.length==0){
+    alert('유효하지 않은 이름입니다.');
+		return false;
+	}
+	var special_pattern = /[:|?<>*"\\\/\s]/gi;
+	if(special_pattern.test(obj) == true){
+    alert('유효하지 않은 이름입니다.');
+		return false;
+  }
+  return true;
 }
 
 //콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크 
@@ -259,10 +37,9 @@ function ctmClick(item) {
   file_name = (file_name.split('.'))[0];
   //toggle 상태 확인
   if(!toggle) {
-    alert('어덕편덕 off 상태입니다. ');
+    alert('어덕편덕 OFF 상태입니다. ');
     return;
   }
-
 
   //확장자 추출
   switch(file_type[file_type.length-1]) {
@@ -289,28 +66,22 @@ function ctmClick(item) {
     break;
 
     default:
-      var temp = (file_name.split('_'));
-      temp = temp[temp.length-1];
 
-      //pholar의 이미지 주소 처리
-      if(img_url.includes('JPG') || img_url.includes('JPEG') )
+      //확장자 없는 이미지 주소 처리
+      if(img_url.toLowerCase().includes('jpg') || img_url.toLowerCase().includes('jpeg') )
       {
         file_type = ".jpg";     
         file_name = 'p';
       } 
-      else if( img_url.includes('GIF') ) {
+      else if( img_url.includes('gif') ) {
         file_type = ".gif";     
         file_name = 'p';
       }
       else 
-        file_type = null; 
-    break;
-  }
+      //url에 확장자가 없는 경우 임시로 jpg로 넘김
+      file_type = '.jpg';
 
-  // 이미지가 로딩되기 전에 콘텍스트 메뉴 클릭시 실행
-  if(file_type == null) {
-    alert('다시 시도해주세요.');
-    return;
+    break;
   }
 
   //중복체크
@@ -350,6 +121,8 @@ function img_recognition(file_url, filetype, file_name) {
   var url = file_url; // 다운로드 url
   var file_type = filetype; // 파일 종류 => 파일 확장자
   var filename = file_name;
+  var newDownload = false; // 원본이름으로 저장(false), 새로운 이름으로 저장(true)
+
   $.ajax({
     method: "POST",
     async: false, // 동기식으로 통신
@@ -382,21 +155,19 @@ function img_recognition(file_url, filetype, file_name) {
         if(count <= 0) {
           var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
           // 원본 이름으로 저장
-          if(fail_confirm) {
-            img_download(url, file_name+file_type);
-//            suggest({filename: item.filename});
-          } else { // 파일 이름 수정
+          if(!fail_confirm) {
+          // 파일 이름 수정
             filename = prompt("어떤 이름으로 저장할까요?", "");
-            filename = characterCheck (filename);
-            alert('얼굴 x: ' +filename);
-
-            if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-              alert("유효하지 않은 파일 이름입니다.");
-              img_download(url, file_name+file_type);
-//              suggest({filename: item.filename});
-            }
+            if(validCheck(filename)) {
+              fullname = filename+filetype;
+              img_download(url, filename+filetype);
+              return;
+            } 
           }
+          img_download_original(url);
+          return;
 
+          // 인물을 찾은 경우
         } else {
 
           var message = ""; // 인식된 인물 이름과 신뢰도 메시지
@@ -447,26 +218,24 @@ function img_recognition(file_url, filetype, file_name) {
           if(many) {
             if(count > 1) {
               filename = prompt("인물이 여러명 인식되었어요.\n" + message + "어떤 이름으로 저장할까요?", filename);
-              filename = characterCheck(filename);
+              if(validCheck(filename))
+                newDownload = true;
 
-              if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                img_download(url, file_name+file_type);
-//                suggest({filename: item.filename});
-              }
             } else if(count == 1) {
               if(conf <= 60.0) {
                 var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
-                if(!fail_confirm) { // 파일 이름 수정
+                // 파일 이름 수정
+                if(!fail_confirm) { 
                   filename = prompt("어떤 이름으로 저장할까요?", "");
-                  filename = characterCheck (filename);
-
-                  if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                    alert("유효하지 않은 파일 이름입니다.");
-                    img_download(url, file_name+file_type);
-//                    suggest({filename: item.filename});
-                  }
-                }
+                  if(validCheck(filename))
+                    newDownload = true;
+                // 지정한 파일 이름 
+                } else
+                  newDownload = true;
+              } else { // 60% 이상이면 파일 이름 자동 수정
+                newDownload = true;
               }
+              
             }
 
           } else {
@@ -475,43 +244,45 @@ function img_recognition(file_url, filetype, file_name) {
               var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
               if(!fail_confirm) { // 파일 이름 수정
                 filename = prompt("어떤 이름으로 저장할까요?", "");
-                filename = characterCheck(filename);
-
-                if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-                  alert("유효하지 않은 파일 이름입니다.");
-                  img_download(url, file_name+file_type);
-//                  suggest({filename: item.filename});
-                }
+                if(validCheck(filename))
+                  newDownload = true;
+              } else {
+                newDownload = true;
               }
+            } else {
+              newDownload = true;
             }
           }
 
           // 최종 경로: .../download/인물이름/인물이름(n).xxx
           try {
-            img_download(url, filename + "/" +filename+file_type);
-//            suggest({filename:  filename + "/" + filename + file_type});
+            //새로운 이름으로 저장
+            if(newDownload)
+              img_download(url, filename + "/" +filename+file_type);
+
+            //원본 이름으로 저장
+            else
+              img_download_original(url);
+
           } catch(e) {
-            img_download(url, file_name+file_type);
-//            suggest({filename:  item.filename});
+            img_download_original(url);
           }
         }
-
     }
+
+
+    
     catch(exception){
       var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
       // 원본 이름으로 저장
       if(fail_confirm) {
-        img_download(url, filename+file_type);
-//        suggest({filename: item.filename});
+        img_download_original(url);
       } else { // 파일 이름 수정
         filename = prompt("어떤 이름으로 저장할까요?", "");
-        filename = characterCheck(filename);
-
-        if(filename == null) { // 공백을 입력하면 원본이름으로 저장
-          alert("유효하지 않은 파일 이름입니다.");
-          img_download(url, file_name+file_type);
-//          suggest({filename: item.filename});
-        }
+        if(validCheck(filename))
+          img_download(url, filename + "/" +filename+file_type);
+        else
+        img_download_original(url);
       }
     } finally {
       console.log("filename(script.js): " + filename);
@@ -519,7 +290,8 @@ function img_recognition(file_url, filetype, file_name) {
 });
 }
 
-//이미지 다운로드
+
+//새로운 이름으로 이미지 다운로드
 function img_download(file_url, file_name) {
   whale.downloads.download({
     url: file_url,
@@ -529,6 +301,13 @@ function img_download(file_url, file_name) {
         console.log(`다운로드가 시작되었습니다. (ID: ${downloadId})`);
     }
 });
+}
+
+//원본 이름으로 이미지 다운로드
+function img_download_original(file_url) {
+  whale.downloads.download({
+    url: file_url
+  });
 }
 
 //콘텍스트 메뉴 생성
