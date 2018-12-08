@@ -13,7 +13,7 @@
       "mobile_user_agent": true
     },
     "background": {
-      "scripts": ["script.js", "jquery-3.3.1.min.js"]
+      "scripts": ["script.js", "jquery-3.3.1.min.js","binaryajax.js","imageinfo.js"]
     },
     "commands": {
         "toggle": {

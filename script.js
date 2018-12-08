@@ -4,10 +4,20 @@ var fileArray = new Array();
 
 var toggle = true; // 토글 버튼 초기 상태
 var many = true; // 인물 여러명 감지시 알림 여부 상태
-var flag = false;
+var flag2 = null; // 이미지 주소에 확장자가 없는 경우 확장자를 저장할 변수
 
 
 
+//이미지 주소에 확장자가 없는 경우 확장자를 저장
+function getImageInfoHandler(url) {
+  return function() {
+    var imageinfo = ImageInfo.getAllFields(url);
+    flag2 = imageinfo['format'];
+  };
+};
+
+
+//파일 이름 확인
 function validCheck(obj){
   if(obj == null ) {
     alert('유효하지 않은 이름입니다.');
@@ -28,9 +38,12 @@ function validCheck(obj){
 //콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크 
 function ctmClick(item) {
   var flag = false;  
+  flag2 = null;
   var img_url= item.srcUrl;
   var file_type = img_url.split('.');
   var file_name = img_url.split('/');
+
+
 
   //원본 파일 이름
   file_name = file_name[file_name.length-1];
@@ -81,10 +94,13 @@ function ctmClick(item) {
       else if(img_url.toLowerCase().includes('ico')) 
         file_type = ".ico";  
       
-      //이미지 주소에 확장자 없는 경우 (수정필요)
+      //이미지 주소에 확장자 없는 경우
       else {        
+        //얼굴인식을 위해 jpg로 설정
         file_type = '.jpg';
-
+        
+        //이미지를 분석해 확장자 알아냄
+        ImageInfo.loadInfo(img_url, getImageInfoHandler(img_url));
       }
 
     break;
@@ -299,21 +315,20 @@ function img_recognition(file_url, filetype, file_name) {
 
 //새로운 이름으로 이미지 다운로드
 function img_download(file_url, file_name) {
+  
+  if(flag2!=null) {
+    file_name = file_name.split('.jpg')[0]+flag2;
+  }
+
   whale.downloads.download({
     url: file_url,
-    filename: file_name
-}, downloadId => {
-    if (typeof downloadId !== `undefined`) {
-        console.log(`다운로드가 시작되었습니다. (ID: ${downloadId})`);
-    }
-});
+    filename: file_name });
 }
 
 //원본 이름으로 이미지 다운로드
 function img_download_original(file_url) {
   whale.downloads.download({
-    url: file_url
-  });
+    url: file_url  });
 }
 
 //콘텍스트 메뉴 생성
