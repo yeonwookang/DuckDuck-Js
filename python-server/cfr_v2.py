@@ -36,11 +36,11 @@ def imgResize (file_name):
     #print(img.shape[1])  # 가로
     #print(img.shape[0])  # 세로
 
-    # 가로 폭이 500 보다 긴 경우에만 줄여줌
-    if img.shape[1] > 500 :
+    # 가로 폭이 300 보다 긴 경우에만 줄여줌
+    if img.shape[1] > 300 :
             # 이미지 축소
-            ratio = 500.0 / img.shape[1]  # 가로 세로 비율 맞추기 위해,
-            ddim = (500, int(img.shape[0] * ratio))  # 가로, 세로
+            ratio = 300.0 / img.shape[1]  # 가로 세로 비율 맞추기 위해,
+            ddim = (300, int(img.shape[0] * ratio))  # 가로, 세로
             resize = cv2.resize(img, ddim, interpolation=cv2.INTER_AREA)
             resized = cv2.bilateralFilter(resize, 9, 41, 41)
 
@@ -79,6 +79,11 @@ if n > 2000000 :
     else :
         img = Image.open("temp.gif")
         img.save("temp.png",'png', optimize=True, quality=70)
+
+        # gif를 png로 저장했는데 이미지 크기가 2MB 이상이라면 크기 줄이기
+        n2 = os.path.getsize("temp.png")
+        if n2 > 2000000 :
+            imgResize("temp.png")
 
 
 # 페이지 인코딩
