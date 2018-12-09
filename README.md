@@ -69,16 +69,17 @@ Q.
 서버 파일 수정
 #73 line 
 #용량이 2MB 이상이면 크기 줄이기 (gif가 아닌 경우는 크기를 줄이고, gif이면 저장 확장자를 바꾼다)
-if n > 2000000 :
-    if image_type != ".gif" :
-        imgResize(file_name)
-        #print("줄인 용량")
-        #print(n2)
-    else :
-        img = Image.open("temp.gif")
-        img.save("temp.png",'png', optimize=True, quality=70)
+          
+          if n > 2000000 :
+          if image_type != ".gif" :
+              imgResize(file_name)
+              #print("줄인 용량")
+              #print(n2)
+          else :
+              img = Image.open("temp.gif")
+              img.save("temp.png",'png', optimize=True, quality=70)
 
-        #png로 바꿔도 2mb 이상인 경우 이미지 사이즈 줄이기        
-        n = os.path.getsize("temp.png")  # 이미지의 용량
-        if n > 2000000 :
-        imgResize(file_name)
+              #png로 바꿔도 2mb 이상인 경우 이미지 사이즈 줄이기        
+              n = os.path.getsize("temp.png")  # 이미지의 용량
+              if n > 2000000 :
+              imgResize(file_name)
