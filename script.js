@@ -42,7 +42,7 @@ function validCheck(obj){
   return true;
 }
 
-//콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크 
+//콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크
 function ctmClick(item) {
   var img_url= item.srcUrl;
   var file_type = img_url.split('.');
@@ -86,26 +86,26 @@ function ctmClick(item) {
 
       //이미지 주소에 확장자 있는 경우
       if(img_url.toLowerCase().includes('jpg') || img_url.toLowerCase().includes('jpeg') )
-        file_type = ".jpg";     
-      else if(img_url.toLowerCase().includes('gif')) 
-        file_type = ".gif";    
-      else if(img_url.toLowerCase().includes('png')) 
-        file_type = ".png";     
-      else if(img_url.toLowerCase().includes('bmp')) 
-        file_type = ".bmp";     
-      else if(img_url.toLowerCase().includes('webp')) 
-        file_type = ".webp";     
-      else if(img_url.toLowerCase().includes('ico')) 
-        file_type = ".ico";  
-      
+        file_type = ".jpg";
+      else if(img_url.toLowerCase().includes('gif'))
+        file_type = ".gif";
+      else if(img_url.toLowerCase().includes('png'))
+        file_type = ".png";
+      else if(img_url.toLowerCase().includes('bmp'))
+        file_type = ".bmp";
+      else if(img_url.toLowerCase().includes('webp'))
+        file_type = ".webp";
+      else if(img_url.toLowerCase().includes('ico'))
+        file_type = ".ico";
+
       //이미지 주소에 확장자 없는 경우
-      else {        
+      else {
         //이미지를 분석해 확장자 알아냄
         file_type=null;
         ImageInfo.loadInfo(img_url, getImageInfoHandler(item, duple_callback));
       }
     break;
-    
+
   }
 
  //중복체크
@@ -117,20 +117,20 @@ function ctmClick(item) {
 
 function duple_check(item, file_type, file_name) {
   var img_url =  item.srcUrl;
-  var flag = false;  
- 
+  var flag = false;
+
   whale.downloads.search({
     orderBy: ['-startTime'],
     exists: true,
     url: img_url
-  }, downloadedItems => {  
+  }, downloadedItems => {
     downloadedItems.some(item => {
       if((item.filename).length!=0) {
         flag = true;
         return true;
       }
     });
-    
+
     //콜백함수 whale.downloads.search 완료 후 실행
     //중복일 때
     if(flag == true) {
@@ -138,8 +138,8 @@ function duple_check(item, file_type, file_name) {
       if(duple_confirm) {
         img_recognition(img_url, file_type, file_name);
       }
-      else 
-        return; 
+      else
+        return;
     }
 
     //중복이 아닐때
@@ -156,26 +156,10 @@ function img_recognition(file_url, filetype, file_name) {
   var filename = file_name;
   var newDownload = false; // 원본이름으로 저장(false), 새로운 이름으로 저장(true)
 
-  if( file_url.split('//')[1].split('/')[0].includes('namu')) {
-    var fail_confirm = confirm("나무위키는 지원되지 않습니다. :(\n원본 이름으로 저장할까요?");
-          // 원본 이름으로 저장
-      if(!fail_confirm) {
-          // 파일 이름 수정
-        filename = prompt("어떤 이름으로 저장할까요?", "");
-        if(validCheck(filename)) {
-            fullname = filename+filetype;
-            img_download(url, filename + "/" +filename+filetype);
-              return;
-            } 
-        }
-        img_download_original(url);
-        return;
-  }
-
   $.ajax({
     method: "POST",
     async: false, // 동기식으로 통신
-    url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr.py", // 파이썬 모듈 호출
+    url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_v2.py", // 파이썬 모듈 호출
     beforeSend: function() {
       whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });// 로딩중 배지 색상 변경 (주황), 알림창
     },
@@ -211,7 +195,7 @@ function img_recognition(file_url, filetype, file_name) {
               fullname = filename+filetype;
               img_download(url, filename+filetype);
               return;
-            } 
+            }
           }
           img_download_original(url);
           return;
@@ -274,17 +258,17 @@ function img_recognition(file_url, filetype, file_name) {
               if(conf <= 60.0) {
                 var fail_confirm = confirm("인물 신뢰도가 낮아요.:(\n결과: " + filename + "(" + conf + "%)\n이대로 저장하시겠어요?");
                 // 파일 이름 수정
-                if(!fail_confirm) { 
+                if(!fail_confirm) {
                   filename = prompt("어떤 이름으로 저장할까요?", "");
                   if(validCheck(filename))
                     newDownload = true;
-                // 지정한 파일 이름 
+                // 지정한 파일 이름
                 } else
                   newDownload = true;
               } else { // 60% 이상이면 파일 이름 자동 수정
                 newDownload = true;
               }
-              
+
             }
 
           } else {
@@ -320,7 +304,7 @@ function img_recognition(file_url, filetype, file_name) {
     }
 
 
-    
+
     catch(exception){
       var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
       // 원본 이름으로 저장
