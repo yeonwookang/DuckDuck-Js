@@ -156,6 +156,22 @@ function img_recognition(file_url, filetype, file_name) {
   var filename = file_name;
   var newDownload = false; // 원본이름으로 저장(false), 새로운 이름으로 저장(true)
 
+  if( file_url.split('//')[1].split('/')[0].includes('namu')) {
+    var fail_confirm = confirm("나무위키는 지원되지 않습니다. :(\n원본 이름으로 저장할까요?");
+          // 원본 이름으로 저장
+      if(!fail_confirm) {
+          // 파일 이름 수정
+        filename = prompt("어떤 이름으로 저장할까요?", "");
+        if(validCheck(filename)) {
+            fullname = filename+filetype;
+            img_download(url, filename + "/" +filename+filetype);
+              return;
+            } 
+        }
+        img_download_original(url);
+        return;
+  }
+
   $.ajax({
     method: "POST",
     async: false, // 동기식으로 통신
