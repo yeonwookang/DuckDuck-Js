@@ -9,12 +9,19 @@ var flag2 = null; // 이미지 주소에 확장자가 없는 경우 확장자를
 
 
 //이미지 주소에 확장자가 없는 경우 확장자를 저장
-function getImageInfoHandler(url) {
+function getImageInfoHandler(item, callback) {
   return function() {
-    var imageinfo = ImageInfo.getAllFields(url);
-    flag2 = imageinfo['format'];
+    var imageinfo = ImageInfo.getAllFields(item.srcUrl);
+    file_type = imageinfo['format'];
+    callback(item, file_type);
   };
 };
+
+function duple_callback(item,file_type){
+  duple_check(item, file_type, "temp");
+}
+
+
 
 
 //파일 이름 확인
@@ -37,12 +44,9 @@ function validCheck(obj){
 
 //콘텍스트 메뉴 클릭시 실행 - 토글 상태 확인, 중복 체크 
 function ctmClick(item) {
-  var flag = false;  
-  flag2 = null;
   var img_url= item.srcUrl;
   var file_type = img_url.split('.');
   var file_name = img_url.split('/');
-
 
 
   //원본 파일 이름
@@ -96,17 +100,25 @@ function ctmClick(item) {
       
       //이미지 주소에 확장자 없는 경우
       else {        
-        //얼굴인식을 위해 jpg로 설정
-        file_type = '.jpg';
-        
         //이미지를 분석해 확장자 알아냄
-        ImageInfo.loadInfo(img_url, getImageInfoHandler(img_url));
+        file_type=null;
+        ImageInfo.loadInfo(img_url, getImageInfoHandler(item, duple_callback));
       }
-
     break;
+    
   }
 
-  //중복체크
+ //중복체크
+  if(file_type!=null)
+    duple_check(item, file_type, file_name);
+
+}
+
+
+function duple_check(item, file_type, file_name) {
+  var img_url =  item.srcUrl;
+  var flag = false;  
+ 
   whale.downloads.search({
     orderBy: ['-startTime'],
     exists: true,
@@ -135,7 +147,6 @@ function ctmClick(item) {
       img_recognition(img_url, file_type, file_name);
     }
   });
-
 }
 
 //이미지 얼굴인식
@@ -315,11 +326,6 @@ function img_recognition(file_url, filetype, file_name) {
 
 //새로운 이름으로 이미지 다운로드
 function img_download(file_url, file_name) {
-  
-  if(flag2!=null) {
-    file_name = file_name.split('.jpg')[0]+flag2;
-  }
-
   whale.downloads.download({
     url: file_url,
     filename: file_name });
