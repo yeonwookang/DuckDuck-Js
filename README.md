@@ -1,6 +1,7 @@
-# 어덕편덕
+# 어덕편덕 (v 1.1)
 > 연예인 사진 자동 분류 웨일 확장앱
 
+   
    *"어차피 하는 덕질 편하게 덕질하세요!"*
 
    [어덕편덕](https://store.whale.naver.com/detail/bghcbobamgkjbcpjdlcfmdkjeaahnoah)은 [Naver Clova Face Recognition API](https://developers.naver.com/docs/clova/api/CFR/API_Guide.md#Overview)를 이용해 유명인 사진 다운로드 시 얼굴을 인식하여 파일명을 추천해주고 자동으로 인물별 폴더를 생성해줍니다.
