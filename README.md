@@ -34,34 +34,49 @@
    
    
 # 어떻게 사용하나요?
-> 이대로만 따라해주세요!
-  1. 웨일 스토어에서 어덕편덕을 다운로드 받으면 사이드바에 덕덕이 아이콘이 나타납니다. 
+> 이대로만 따라 해주세요!
+  1. 웨일 스토어에서 어덕편덕을 다운로드 받으면 사이드바에 덕덕이 아이콘이 나타납니다. <br>
    <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/1.PNG?raw=true"></img>
-   
-  2. 사이드바 영역에서는 각종 설정, 최근에 다운로드 받은 이미지의 정보 및 이전 다운로드 내역을 확인할 수 있습니다. (단축키 Alt+A)
+   <br><br>
+  2. 사이드바 영역에서는 각종 설정, 최근에 다운로드 받은 이미지의 정보 및 이전 다운로드 내역을 확인할 수 있습니다. (단축키 Alt+A) <br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/2.PNG?raw=true"></img>
+   <br><br>
 
-  3. 사이드바 영역의 왼쪽 상단에 있는 스위치로 서비스를 키고 끌 수 있습니다. (단축키 Alt+S)
+  3. 사이드바 영역의 왼쪽 상단에 있는 스위치로 서비스를 키고 끌 수 있습니다. (단축키 Alt+S) <br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/3.PNG?raw=true"></img>
+   <br><br>
 
-  4. 웹에서 저장할 인물 이미지에 마우스 오른쪽을 클릭하고  이미지 저장하기를 클릭합니다.
+  4. 웹에서 저장할 인물 이미지에 마우스 오른쪽을 클릭하고  이미지 저장하기를 클릭합니다. <br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/4(2).PNG?raw=true"></img>
+   <br><br>
 
-  5. 덕덕이가 열심히 이미지를 분석합니다!
+  5. 덕덕이가 열심히 이미지를 분석합니다! <br>
+    소요 시간은 평균 5초 정도이나 이미지 크기와 네트워크 상태에 따라 조금씩 달라집니다. <br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/5.PNG?raw=true"></img>
+   <br><br>
   
-  6. 소요 시간은 평균 5초 정도이나 이미지 크기와 네트워크 상태에 따라 조금씩 달라집니다.
-  
-  7. 팝업으로 분석 결과를 보여줍니다.
-  
-  8. 덕덕이가 분석한 인물 신뢰도가 60% 이상인 경우 사용자 컴퓨터의 Download-인물이름 경로로 바로 저장됩니다.
+  6. 팝업으로 분석 결과를 보여줍니다.<br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/6-1.PNG?raw=true"></img><br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/6-2.PNG?raw=true"></img><br>
+   <br><br>
 
-  9. 이미지를 분석한 결과 신뢰도가 60% 이하인 경우 사용자가 직접 파일 이름을 입력할 수 있습니다.
+  7. 덕덕이가 분석한 인물 신뢰도가 60% 이상인 경우 사용자 컴퓨터의 Download-인물이름 경로로 바로 저장됩니다.<br>
+     이미지를 분석한 결과 신뢰도가 60% 이하인 경우 사용자가 직접 파일 이름을 입력할 수 있습니다.<br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/7-1.PNG?raw=true"></img><br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/7-2.PNG?raw=true"></img><br>
+   <br><br>
 
-  10. 인물 여러명 인식시 알림이 켜져 있는 경우, 2명 이상 인식 되면 사용자가 직접 파일 이름을 입력할 수 있습니다. 
-   (해제된 경우에는 신뢰도가 가장 높은 인물을 기준으로 저장합니다.)
-   
-  11. 중복된 사진을 저장하는 경우 사용자에게 알려줍니다.
+  8. 인물 여러명 인식시 알림이 켜져 있는 경우, 2명 이상 인식 되면 사용자가 직접 파일 이름을 입력할 수 있습니다. <br>
+   (해제된 경우에는 신뢰도가 가장 높은 인물을 기준으로 저장합니다.)<br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/8-1.PNG?raw=true"></img><br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/8-2.PNG?raw=true"></img><br>
+   <br><br>
 
+  9. 중복된 이미지를 저장하는 경우 사용자에게 알려줍니다. <br>
+   <img src="https://github.com/yeonwookang/DuckDuck-Js/blob/master/sidebar/src/img/intro/9.PNG?raw=true"></img><br>
+   <br><br> 
    
-   
-  ※ 기타 문의 사항이나 오류는 자주 묻는 질문을 참고해주세요.
+  10. 기타 문의 사항이나 오류는 자주 묻는 질문을 참고해주세요.
 
 
 
