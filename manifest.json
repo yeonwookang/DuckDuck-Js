@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "어덕편덕",
-    "description": "연예인 사진 자동 분류",
+    "description": "얼굴 인식 기반 연예인 사진 자동 분류 확장앱",
     "version": "1.0",
 
     "sidebar_action": {
