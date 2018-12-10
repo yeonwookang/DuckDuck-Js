@@ -3,7 +3,7 @@
 
    "어차피 하는 덕질 편하게 덕질하세요!"
 
-   어덕편덕은 Naver Clova Face Recognition API를 이용해 유명인 사진 다운로드 시 얼굴을 인식하여 파일명을 추천해주고 자동으로 인물별 폴더를 생성해줍니다.
+   [어덕편덕](https://store.whale.naver.com/detail/bghcbobamgkjbcpjdlcfmdkjeaahnoah)은 Naver Clova Face Recognition API를 이용해 유명인 사진 다운로드 시 얼굴을 인식하여 파일명을 추천해주고 자동으로 인물별 폴더를 생성해줍니다.
 
    또한, 기존 사진과 중복되는 사진을 저장하는 경우 알려주는 확장앱입니다.
 
