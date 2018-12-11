@@ -1,8 +1,10 @@
+#!C:/Users/rk/Anaconda3/python.exe
+#-*- coding: utf-8 -*-
+
+# AWS에 올라가있는 코드
 #!/usr/bin/env python
 # coding: utf-8
 #-- coding: utf-8 --
-
-# AWS에 올라가있는 코드
 
 #import nltk # is not in Javascript
 import os
@@ -24,9 +26,15 @@ sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 # 이미지를 url로부터 저장하는 함수
 def get_image(image_url, image_type) :
     # 전달 받은 url로 임시 파일 다운로드 (속도가 다소 느린 문제)
-    with urllib.request.urlopen(image_url) as url:
-        with open("temp" + image_type, 'wb') as f:
-            f.write(url.read())
+    # 일부 사이트에서 HTTP 통신 에러로 인한 헤더 추가
+    opener=urllib.request.build_opener()
+    opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+    urllib.request.install_opener(opener)
+    urllib.request.urlretrieve(image_url, "temp"+image_type)
+
+    #with urllib.request.urlopen(image_url) as url:
+    #    with open("temp" + image_type, 'wb') as f:
+    #        f.write(url.read())
 
 # 이미지 리사이즈 함수 (파일 이름을 매개 변수로 받음) - 가로폭 500으로 비율 맞춰서 줄임
 def imgResize (file_name):

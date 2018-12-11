@@ -159,7 +159,7 @@ function img_recognition(file_url, filetype, file_name) {
   $.ajax({
     method: "POST",
     async: false, // 동기식으로 통신
-    url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_v2.py", // 파이썬 모듈 호출
+    url: "http://localhost/whale/python-server/cfr_v2.py", // 파이썬 모듈 호출 (http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_v2.py)
     beforeSend: function() {
       whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });// 로딩중 배지 색상 변경 (주황), 알림창
     },
@@ -303,10 +303,8 @@ function img_recognition(file_url, filetype, file_name) {
         }
     }
 
-
-
     catch(exception){
-      var fail_confirm = confirm("인물 인식 처리 중 문제가 발생했어요. :(\n원본 이름으로 저장할까요?");
+      var fail_confirm = confirm("인물을 찾지 못했어요. :(\n원본 이름으로 저장할까요?");
       // 원본 이름으로 저장
       if(fail_confirm) {
         img_download_original(url);
