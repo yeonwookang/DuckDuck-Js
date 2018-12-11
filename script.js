@@ -159,7 +159,7 @@ function img_recognition(file_url, filetype, file_name) {
   $.ajax({
     method: "POST",
     async: false, // 동기식으로 통신
-    url: "http://localhost/whale/python-server/cfr_v2.py", // 파이썬 모듈 호출 (http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_v2.py)
+    url: "http://ec2-52-79-137-54.ap-northeast-2.compute.amazonaws.com/duckduck/cfr_v2.py", // 파이썬 모듈 호출 (http://localhost/whale/python-server/cfr_v2.py)
     beforeSend: function() {
       whale.sidebarAction.setBadgeBackgroundColor({ color: [255, 187, 0, 255] });// 로딩중 배지 색상 변경 (주황), 알림창
     },
